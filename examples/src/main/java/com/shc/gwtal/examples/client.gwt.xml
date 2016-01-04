@@ -1,0 +1,19 @@
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="examples">
+
+    <!-- Inherit the core Web Toolkit stuff.                  -->
+    <inherits name='com.google.gwt.user.User'/>
+
+    <!-- Inherit the GWT-AL library.                          -->
+    <inherits name='com.shc.gwtal.client'/>
+
+    <!-- Define the entrypoint                                -->
+    <entry-point class='com.shc.gwtal.examples.client.Main'/>
+
+    <!-- Define the theme                                     -->
+    <inherits name='com.google.gwt.user.theme.dark.Dark'/>
+
+    <source path='client'/>
+
+</module>

@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compile 'com.google.gwt:gwt-user:2.7.0'
+}
+
+jar {
+    from project(":gwt-al").sourceSets.main.allSource
+}
+
+javadoc {
+    options.addStringOption("sourcepath", "")
+}

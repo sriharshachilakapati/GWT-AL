@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+    }
+}
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
+
+project(":examples") {
+    apply plugin: 'gwt'
+    apply plugin: 'war'
+
+    dependencies {
+        compile project(":gwt-al")
+        compile 'com.google.gwt:gwt-user:2.7.0'
+    }
+}
