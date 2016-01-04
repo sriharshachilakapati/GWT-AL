@@ -13,9 +13,9 @@ examples/war/
 *.iml
 *.ipr
 *.iws
-webgl4j/*.iml
-webgl4j/*.ipr
-webgl4j/*.iws
+gwt-al/*.iml
+gwt-al/*.ipr
+gwt-al/*.iws
 examples/*.iml
 examples/*.ipr
 examples/*.iws
