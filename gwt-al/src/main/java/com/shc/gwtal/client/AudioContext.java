@@ -1,6 +1,10 @@
 package com.shc.gwtal.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.xml.client.DOMException;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -44,6 +48,103 @@ public final class AudioContext extends JavaScriptObject
         return this.currentTime;
     }-*/;
 
+    public native Promise<Void> suspend() /*-{
+        return this.suspend();
+    }-*/;
+
+    public native Promise<Void> resume() /*-{
+        return this.resume();
+    }-*/;
+
+    public native Promise<Void> close() /*-{
+        return this.close();
+    }-*/;
+
+    public native EventHandler getOnStateChange() /*-{
+        return this.onstatechange;
+    }-*/;
+
+    public native void setOnStateChange(EventHandler eventHandler) /*-{
+        this.onstatechange = eventHandler;
+    }-*/;
+
+    public native AudioBuffer createBuffer(int numberOfChannels, int length, float sampleRate) /*-{
+        return this.createBuffer(numberOfChannels, length, sampleRate);
+    }-*/;
+
+    public Promise<AudioBuffer> decodeAudioData(ArrayBuffer audioData, DecodeSuccessCallback successCallback)
+    {
+        return decodeAudioData(audioData, successCallback,
+                new DecodeErrorCallback()
+                {
+                    @Override
+                    public void invoke(DOMException error)
+                    {
+                        GWT.log(error.toString());
+                    }
+                }
+        );
+    }
+
+    public Promise<AudioBuffer> decodeAudioData(ArrayBuffer audioData)
+    {
+        return decodeAudioData(audioData, new DecodeSuccessCallback()
+        {
+            @Override
+            public void invoke(AudioBuffer decodedData)
+            {
+            }
+        });
+    }
+
+    public native Promise<AudioBuffer> decodeAudioData(ArrayBuffer audioData, DecodeSuccessCallback successCallback,
+                                                       DecodeErrorCallback errorCallback) /*-{
+        return this.decodeAudioData(
+            audioData,
+
+            function (decodedData)
+            {
+                if (successCallback != null)
+                    successCallback.@com.shc.gwtal.client.AudioContext.DecodeSuccessCallback::invoke(*)(decodedData);
+            },
+
+            function (domexception)
+            {
+                if (errorCallback != null)
+                    errorCallback.@com.shc.gwtal.client.AudioContext.DecodeErrorCallback::invoke(*)(domexception);
+            }
+        );
+    }-*/;
+
+    public native AudioBufferSourceNode createBufferSource() /*-{
+        return this.createBufferSource();
+    }-*/;
+
+    public native AudioDestinationNode getDestination() /*-{
+        return this.destination;
+    }-*/;
+
+    @Deprecated
+    public native AudioListener getAudioListener() /*-{
+        return this.listener;
+    }-*/;
+
+    private native String nGetState() /*-{
+        return this.state;
+    }-*/;
+
+    public State getState()
+    {
+        String jsState = nGetState();
+
+        for (State state : State.values())
+            if (state.getJsState().equalsIgnoreCase(jsState))
+                return state;
+
+        // Unknown state, might be suspended
+        return State.SUSPENDED;
+    }
+
     public enum State
     {
         SUSPENDED("suspended"),
@@ -80,6 +181,16 @@ public final class AudioContext extends JavaScriptObject
         {
             return jsState;
         }
+    }
+
+    public interface DecodeSuccessCallback
+    {
+        void invoke(AudioBuffer decodedData);
+    }
+
+    public interface DecodeErrorCallback
+    {
+        void invoke(DOMException error);
     }
 
     public static class Options
