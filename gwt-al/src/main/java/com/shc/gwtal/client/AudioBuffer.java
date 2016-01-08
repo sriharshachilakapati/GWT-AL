@@ -16,7 +16,7 @@ public class AudioBuffer extends JavaScriptObject
         return this.sampleRate;
     }-*/;
 
-    public final native long getLength() /*-{
+    public final native int getLength() /*-{
         return this.length;
     }-*/;
 
@@ -24,29 +24,29 @@ public class AudioBuffer extends JavaScriptObject
         return this.duration;
     }-*/;
 
-    public final native long getNumberOfChannels() /*-{
+    public final native int getNumberOfChannels() /*-{
         return this.numberOfChannels;
     }-*/;
 
-    public final native Float32Array getChannelData(long channel) /*-{
+    public final native Float32Array getChannelData(int channel) /*-{
         return this.getChannelData(channel);
     }-*/;
 
-    public final void copyFromChannel(Float32Array destination, long channelNumber)
+    public final void copyFromChannel(Float32Array destination, int channelNumber)
     {
         copyFromChannel(destination, channelNumber, 0);
     }
 
-    public final native void copyFromChannel(Float32Array destination, long channelNumber, long startInChannel) /*-{
+    public final native void copyFromChannel(Float32Array destination, int channelNumber, int startInChannel) /*-{
         this.copyFromChannel(destination, channelNumber, startInChannel);
     }-*/;
 
-    public final void copyToChannel(Float32Array source, long channelNumber)
+    public final void copyToChannel(Float32Array source, int channelNumber)
     {
         copyToChannel(source, channelNumber, 0);
     }
 
-    public final native void copyToChannel(Float32Array source, long channelNumber, long startInChannel) /*-{
+    public final native void copyToChannel(Float32Array source, int channelNumber, int startInChannel) /*-{
         this.copyToChannel(source, channelNumber, startInChannel);
     }-*/;
 }

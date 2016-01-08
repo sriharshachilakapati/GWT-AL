@@ -16,12 +16,12 @@ public class AudioNode extends EventTarget
         return connect(destination, 0);
     }
 
-    public final AudioNode connect(AudioNode destination, long output)
+    public final AudioNode connect(AudioNode destination, int output)
     {
         return connect(destination, output, 0);
     }
 
-    public final native AudioNode connect(AudioNode destination, long output, long input) /*-{
+    public final native AudioNode connect(AudioNode destination, int output, int input) /*-{
         return this.connect(destination, output, input);
     }-*/;
 
@@ -30,7 +30,7 @@ public class AudioNode extends EventTarget
         connect(destination, 0);
     }
 
-    public final native void connect(AudioParam destination, long output) /*-{
+    public final native void connect(AudioParam destination, int output) /*-{
         this.connect(destination, output);
     }-*/;
 
@@ -38,7 +38,7 @@ public class AudioNode extends EventTarget
         this.disconnect();
     }-*/;
 
-    public final native void disconnect(long output) /*-{
+    public final native void disconnect(int output) /*-{
         this.disconnect(output);
     }-*/;
 
@@ -46,11 +46,11 @@ public class AudioNode extends EventTarget
         this.disconnect(destination);
     }-*/;
 
-    public final native void disconnect(AudioNode destination, long output) /*-{
+    public final native void disconnect(AudioNode destination, int output) /*-{
         this.disconnect(destination, output);
     }-*/;
 
-    public final native void disconnect(AudioNode destination, long output, long input) /*-{
+    public final native void disconnect(AudioNode destination, int output, int input) /*-{
         this.disconnect(destination, output, input);
     }-*/;
 
@@ -58,7 +58,7 @@ public class AudioNode extends EventTarget
         this.disconnect(destination);
     }-*/;
 
-    public final native void disconnect(AudioParam destination, long output) /*-{
+    public final native void disconnect(AudioParam destination, int output) /*-{
         this.disconnect(destination, output);
     }-*/;
 
@@ -66,19 +66,19 @@ public class AudioNode extends EventTarget
         return this.context;
     }-*/;
 
-    public final native long getNumberOfInputs() /*-{
+    public final native int getNumberOfInputs() /*-{
         return this.numberOfInputs;
     }-*/;
 
-    public final native long getNumberOfOutputs() /*-{
+    public final native int getNumberOfOutputs() /*-{
         return this.numberOfOutputs;
     }-*/;
 
-    public final native long getChannelCount() /*-{
+    public final native int getChannelCount() /*-{
         return this.channelCount;
     }-*/;
 
-    public final native void setChannelCount(long channelCount) /*-{
+    public final native void setChannelCount(int channelCount) /*-{
         this.channelCount = channelCount;
     }-*/;
 
