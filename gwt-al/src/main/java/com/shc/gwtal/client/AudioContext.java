@@ -145,6 +145,10 @@ public final class AudioContext extends JavaScriptObject
         return State.SUSPENDED;
     }
 
+    public native Promise<AudioWorker> createAudioWorker(String scriptURL) /*-{
+        return this.createAudioWorker(scriptURL);
+    }-*/;
+
     public enum State
     {
         SUSPENDED("suspended"),
