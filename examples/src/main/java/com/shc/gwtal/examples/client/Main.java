@@ -2,13 +2,20 @@ package com.shc.gwtal.examples.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.xhr.client.XMLHttpRequest;
+import com.shc.gwtal.client.AudioBuffer;
 import com.shc.gwtal.client.AudioBufferSourceNode;
 import com.shc.gwtal.client.AudioContext;
 import com.shc.gwtal.client.AudioContextException;
 
 public class Main implements EntryPoint
 {
+    private AudioBuffer           buffer;
+    private AudioBufferSourceNode source;
+
     @Override
     public void onModuleLoad()
     {
@@ -16,6 +23,47 @@ public class Main implements EntryPoint
         {
             // Create an audio context
             AudioContext context = AudioContext.create();
+
+            FlowPanel panel = new FlowPanel();
+
+            // Create the play button
+            Button playButton = new Button("Play");
+            playButton.addClickHandler((e) ->
+            {
+                // Stop if already playing
+                if (source != null)
+                {
+                    source.stop();
+                    source = null;
+                }
+
+                // Create the source node
+                source = context.createBufferSource();
+                source.setBuffer(buffer);
+
+                // Connect to the destination and play
+                source.connect(context.getDestination());
+                source.start();
+            });
+            playButton.setEnabled(false);
+
+            // Create the stop button
+            Button stopButton = new Button("Stop");
+            stopButton.addClickHandler((e) ->
+            {
+                if (source != null)
+                {
+                    source.stop();
+                    source = null;
+                }
+            });
+
+            // Add the buttons to the panel
+            panel.add(playButton);
+            panel.add(stopButton);
+
+            // Add the panel to the document
+            RootPanel.get().add(panel);
 
             String url = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Demo_chorus.ogg";
 
@@ -39,12 +87,9 @@ public class Main implements EntryPoint
                                     // Upon success, we are returned with an AudioBuffer
                                     (buffer) ->
                                     {
-                                        // Create the source, set the buffer, connect to the destination and play
-                                        AudioBufferSourceNode source = context.createBufferSource();
-                                        source.setBuffer(buffer);
-
-                                        source.connect(context.getDestination());
-                                        source.start(0);
+                                        // Save the buffer
+                                        this.buffer = buffer;
+                                        playButton.setEnabled(true);
                                     }
                             );
                 }
