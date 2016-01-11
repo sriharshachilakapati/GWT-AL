@@ -176,6 +176,19 @@ public final class AudioContext extends JavaScriptObject
         return this.createAnalyser();
     }-*/;
 
+    public native GainNode createGain() /*-{
+        return this.createGain();
+    }-*/;
+
+    public DelayNode createDelay()
+    {
+        return createDelay(1.0);
+    }
+
+    public native DelayNode createDelay(double maxDelayTime) /*-{
+        return this.createDelay(maxDelayTime);
+    }-*/;
+
     public enum State
     {
         SUSPENDED("suspended"),
