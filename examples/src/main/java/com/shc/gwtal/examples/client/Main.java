@@ -24,6 +24,11 @@ public class Main implements EntryPoint
             // Create an audio context
             AudioContext context = AudioContext.create();
 
+            context.setOnStateChange(() ->
+            {
+                GWT.log(context.getState().getJsState());
+            });
+
             FlowPanel panel = new FlowPanel();
 
             // Create the play button

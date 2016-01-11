@@ -2,7 +2,6 @@ package com.shc.gwtal.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.xml.client.DOMException;
 
@@ -60,12 +59,12 @@ public final class AudioContext extends JavaScriptObject
         return this.close();
     }-*/;
 
-    public native EventHandler getOnStateChange() /*-{
-        return this.onstatechange;
-    }-*/;
-
-    public native void setOnStateChange(EventHandler eventHandler) /*-{
-        this.onstatechange = eventHandler;
+    public native void setOnStateChange(AudioEventHandler audioEventHandler) /*-{
+        this.onstatechange = function ()
+        {
+            if (audioEventHandler)
+                audioEventHandler.@com.shc.gwtal.client.AudioEventHandler::invoke()();
+        };
     }-*/;
 
     public native AudioBuffer createBuffer(int numberOfChannels, int length, float sampleRate) /*-{
@@ -147,6 +146,30 @@ public final class AudioContext extends JavaScriptObject
 
     public native Promise<AudioWorker> createAudioWorker(String scriptURL) /*-{
         return this.createAudioWorker(scriptURL);
+    }-*/;
+
+    @Deprecated
+    public ScriptProcessorNode createScriptProcessor()
+    {
+        return createScriptProcessor(0, 0, 0);
+    }
+
+    @Deprecated
+    public ScriptProcessorNode createScriptProcessor(int bufferSize)
+    {
+        return createScriptProcessor(bufferSize, 0, 0);
+    }
+
+    @Deprecated
+    public ScriptProcessorNode createScriptProcessor(int bufferSize, int numberOfInputChannels)
+    {
+        return createScriptProcessor(bufferSize, numberOfInputChannels, 0);
+    }
+
+    @Deprecated
+    public native ScriptProcessorNode createScriptProcessor(int bufferSize, int numberOfInputChannels,
+                                                            int numberOfOutputChannels) /*-{
+        return this.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
     }-*/;
 
     public enum State

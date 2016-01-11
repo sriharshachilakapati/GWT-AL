@@ -2,7 +2,6 @@ package com.shc.gwtal.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.event.shared.EventHandler;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -29,20 +28,20 @@ public class AudioWorker extends JavaScriptObject
         return this.parameters;
     }-*/;
 
-    public final native EventHandler getOnMessage() /*-{
-        return this.onmessage;
+    public final native void setOnMessage(AudioEventHandler eventHandler) /*-{
+        this.onmessage = function()
+        {
+            if (eventHandler)
+                eventHandler.@com.shc.gwtal.client.AudioEventHandler::invoke()();
+        };
     }-*/;
 
-    public final native void setOnMessage(EventHandler eventHandler) /*-{
-        this.onmessage = eventHandler;
-    }-*/;
-
-    public final native EventHandler getOnLoaded() /*-{
-        return this.onloaded;
-    }-*/;
-
-    public final native void setOnLoaded(EventHandler eventHandler) /*-{
-        this.onloaded = eventHandler;
+    public final native void setOnLoaded(AudioEventHandler eventHandler) /*-{
+        this.onloaded = function()
+        {
+            if (eventHandler)
+                eventHandler.@com.shc.gwtal.client.AudioEventHandler::invoke()();
+        };
     }-*/;
 
     public final native AudioWorkerNode createNode(int numberOfInputs, int numberOfOutputs) /*-{

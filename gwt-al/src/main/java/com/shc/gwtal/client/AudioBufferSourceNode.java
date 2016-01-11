@@ -1,7 +1,5 @@
 package com.shc.gwtal.client;
 
-import com.google.gwt.event.shared.EventHandler;
-
 /**
  * @author Sri Harsha Chilakapati
  */
@@ -78,11 +76,11 @@ public class AudioBufferSourceNode extends AudioNode
         this.stop(when);
     }-*/;
 
-    public final native EventHandler getOnEnded() /*-{
-        return this.onended;
-    }-*/;
-
-    public final native void setOnEnded(EventHandler eventHandler) /*-{
-        this.onended = eventHandler;
+    public final native void setOnEnded(AudioEventHandler eventHandler) /*-{
+        this.onended = function()
+        {
+            if (eventHandler)
+                eventHandler.@com.shc.gwtal.client.AudioEventHandler::invoke()();
+        };
     }-*/;
 }
