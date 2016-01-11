@@ -172,6 +172,10 @@ public final class AudioContext extends JavaScriptObject
         return this.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
     }-*/;
 
+    public native AnalyserNode createAnalyser() /*-{
+        return this.createAnalyser();
+    }-*/;
+
     public enum State
     {
         SUSPENDED("suspended"),
