@@ -2,7 +2,10 @@ package com.shc.gwtal.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayInteger;
+import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.xml.client.DOMException;
 
 /**
@@ -187,6 +190,22 @@ public final class AudioContext extends JavaScriptObject
 
     public native DelayNode createDelay(double maxDelayTime) /*-{
         return this.createDelay(maxDelayTime);
+    }-*/;
+
+    public native BiquadFilterNode createBiquadFilter() /*-{
+        return this.createBiquadFilter();
+    }-*/;
+
+    public native IIRFilterNode createIIRFilter(JsArrayNumber feedforward, JsArrayNumber feedback) /*-{
+        return this.createIIRFilter(feedforward, feedback);
+    }-*/;
+
+    public native IIRFilterNode createIIRFilter(JsArrayInteger feedforward, JsArrayInteger feedback) /*-{
+        return this.createIIRFilter(feedforward, feedback);
+    }-*/;
+
+    public native IIRFilterNode createIIRFilter(Float64Array feedforward, Float64Array feedback) /*-{
+        return this.createIIRFilter(feedforward, feedback);
     }-*/;
 
     public enum State
