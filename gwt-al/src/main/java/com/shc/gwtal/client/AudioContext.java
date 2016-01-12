@@ -208,6 +208,14 @@ public final class AudioContext extends JavaScriptObject
         return this.createIIRFilter(feedforward, feedback);
     }-*/;
 
+    public native WaveShaperNode createWaveShaper() /*-{
+        return this.createWaveShaper();
+    }-*/;
+
+    public native PannerNode createPanner() /*-{
+        return this.createPanner();
+    }-*/;
+
     public enum State
     {
         SUSPENDED("suspended"),
