@@ -1,4 +1,6 @@
-package com.shc.gwtal.client;
+package com.shc.gwtal.client.nodes;
+
+import com.shc.gwtal.client.AudioEventHandler;
 
 /**
  * @author Sri Harsha Chilakapati

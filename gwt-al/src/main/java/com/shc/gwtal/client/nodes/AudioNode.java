@@ -1,6 +1,8 @@
-package com.shc.gwtal.client;
+package com.shc.gwtal.client.nodes;
 
 import com.google.gwt.dom.client.EventTarget;
+import com.shc.gwtal.client.AudioContext;
+import com.shc.gwtal.client.AudioParam;
 
 /**
  * @author Sri Harsha Chilakapati

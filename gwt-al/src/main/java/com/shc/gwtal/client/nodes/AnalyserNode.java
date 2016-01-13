@@ -1,4 +1,4 @@
-package com.shc.gwtal.client;
+package com.shc.gwtal.client.nodes;
 
 import com.google.gwt.typedarrays.shared.Float32Array;
 import com.google.gwt.typedarrays.shared.Uint8Array;

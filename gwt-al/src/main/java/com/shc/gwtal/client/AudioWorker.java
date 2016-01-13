@@ -2,6 +2,7 @@ package com.shc.gwtal.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.shc.gwtal.client.nodes.AudioWorkerNode;
 
 /**
  * @author Sri Harsha Chilakapati

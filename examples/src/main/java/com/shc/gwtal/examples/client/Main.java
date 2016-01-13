@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 import com.shc.gwtal.client.AudioBuffer;
-import com.shc.gwtal.client.AudioBufferSourceNode;
+import com.shc.gwtal.client.nodes.AudioBufferSourceNode;
 import com.shc.gwtal.client.AudioContext;
 import com.shc.gwtal.client.AudioContextException;
 

@@ -1,6 +1,7 @@
-package com.shc.gwtal.client;
+package com.shc.gwtal.client.nodes;
 
 import com.google.gwt.typedarrays.shared.Float32Array;
+import com.shc.gwtal.client.AudioParam;
 
 /**
  * @author Sri Harsha Chilakapati

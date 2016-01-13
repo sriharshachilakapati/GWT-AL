@@ -7,6 +7,16 @@ import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.xml.client.DOMException;
+import com.shc.gwtal.client.nodes.AnalyserNode;
+import com.shc.gwtal.client.nodes.AudioBufferSourceNode;
+import com.shc.gwtal.client.nodes.AudioDestinationNode;
+import com.shc.gwtal.client.nodes.BiquadFilterNode;
+import com.shc.gwtal.client.nodes.DelayNode;
+import com.shc.gwtal.client.nodes.GainNode;
+import com.shc.gwtal.client.nodes.IIRFilterNode;
+import com.shc.gwtal.client.nodes.PannerNode;
+import com.shc.gwtal.client.nodes.ScriptProcessorNode;
+import com.shc.gwtal.client.nodes.WaveShaperNode;
 
 /**
  * @author Sri Harsha Chilakapati

@@ -1,4 +1,4 @@
-package com.shc.gwtal.client;
+package com.shc.gwtal.client.nodes;
 
 /**
  * @author Sri Harsha Chilakapati

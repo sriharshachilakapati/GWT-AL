@@ -1,7 +1,8 @@
-package com.shc.gwtal.client;
+package com.shc.gwtal.client.nodes;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.shc.gwtal.client.AudioEventHandler;
 
 /**
  * @author Sri Harsha Chilakapati
