@@ -1,5 +1,8 @@
 package com.shc.gwtal.client.nodes;
 
+import com.shc.gwtal.client.enums.DistanceModelType;
+import com.shc.gwtal.client.enums.PanningModelType;
+
 /**
  * @author Sri Harsha Chilakapati
  */
@@ -104,59 +107,4 @@ public class PannerNode extends AudioNode
     public final native void setVelocity(float x, float y, float z) /*-{
         this.setVelocity(x, y, z);
     }-*/;
-
-    public enum PanningModelType
-    {
-        EQUALPOWER("equalpower"),
-        HRTF("HRTF");
-
-        private String jsType;
-
-        PanningModelType(String jsType)
-        {
-            this.jsType = jsType;
-        }
-
-        public static PanningModelType forJsType(String jsType)
-        {
-            for (PanningModelType type : values())
-                if (type.getJsType().equalsIgnoreCase(jsType))
-                    return type;
-
-            return EQUALPOWER;
-        }
-
-        public String getJsType()
-        {
-            return jsType;
-        }
-    }
-
-    public enum DistanceModelType
-    {
-        LINEAR("linear"),
-        INVERSE("inverse"),
-        EXPONENTIAL("exponential");
-
-        private String jsType;
-
-        DistanceModelType(String jsType)
-        {
-            this.jsType = jsType;
-        }
-
-        public static DistanceModelType forJsType(String jsType)
-        {
-            for (DistanceModelType type : values())
-                if (type.getJsType().equalsIgnoreCase(jsType))
-                    return type;
-
-            return LINEAR;
-        }
-
-        public String getJsType()
-        {
-            return jsType;
-        }
-    }
 }

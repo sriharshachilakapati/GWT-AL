@@ -3,6 +3,8 @@ package com.shc.gwtal.client.nodes;
 import com.google.gwt.dom.client.EventTarget;
 import com.shc.gwtal.client.AudioContext;
 import com.shc.gwtal.client.AudioParam;
+import com.shc.gwtal.client.enums.ChannelCountMode;
+import com.shc.gwtal.client.enums.ChannelInterpretation;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -119,63 +121,4 @@ public class AudioNode extends EventTarget
     private native void nSetChannelInterpretation(String channelInterpretation) /*-{
         this.channelInterpretation = channelInterpretation;
     }-*/;
-
-    public enum ChannelCountMode
-    {
-        MAX("max"),
-        CLAMPED_MAX("clamped-max"),
-        EXPLICIT("explicit");
-
-        private String jsState;
-
-        ChannelCountMode(String jsState)
-        {
-            this.jsState = jsState;
-        }
-
-        public static ChannelCountMode forJsState(String jsState)
-        {
-            for (ChannelCountMode mode : values())
-            {
-                if (mode.getJsState().equalsIgnoreCase(jsState))
-                    return mode;
-            }
-
-            return null;
-        }
-
-        public String getJsState()
-        {
-            return jsState;
-        }
-    }
-
-    public enum ChannelInterpretation
-    {
-        SPEAKERS("speakers"),
-        DISCRETE("discrete");
-
-        private String jsState;
-
-        ChannelInterpretation(String jsState)
-        {
-            this.jsState = jsState;
-        }
-
-        public static ChannelInterpretation forJsState(String jsState)
-        {
-            for (ChannelInterpretation mode : values())
-            {
-                if (mode.getJsState().equalsIgnoreCase(jsState))
-                    return mode;
-            }
-
-            return null;
-        }
-
-        public String getJsState()
-        {
-            return jsState;
-        }
-    }
 }

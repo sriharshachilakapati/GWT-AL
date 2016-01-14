@@ -2,6 +2,7 @@ package com.shc.gwtal.client.nodes;
 
 import com.google.gwt.typedarrays.shared.Float32Array;
 import com.shc.gwtal.client.AudioParam;
+import com.shc.gwtal.client.enums.BiquadFilterType;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -50,37 +51,4 @@ public class BiquadFilterNode extends AudioNode
                                                   Float32Array phaseResponse) /*-{
         return this.getFrequencyResponse(frequencyHz, magResponse, phaseResponse);
     }-*/;
-
-    public enum BiquadFilterType
-    {
-        LOWPASS("lowpass"),
-        HIGHPASS("highpass"),
-        BANDPASS("bandpass"),
-        LOWSHELF("lowshelf"),
-        HIGHSHELF("highshelf"),
-        PEAKING("peaking"),
-        NOTCH("notch"),
-        ALLPASS("allpass");
-
-        private String jsType;
-
-        BiquadFilterType(String jsType)
-        {
-            this.jsType = jsType;
-        }
-
-        public static BiquadFilterType forJsType(String jsType)
-        {
-            for (BiquadFilterType type : values())
-                if (type.getJsType().equalsIgnoreCase(jsType))
-                    return type;
-
-            return ALLPASS;
-        }
-
-        public String getJsType()
-        {
-            return this.jsType;
-        }
-    }
 }

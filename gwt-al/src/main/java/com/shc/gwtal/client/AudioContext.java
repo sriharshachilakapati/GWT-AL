@@ -7,6 +7,8 @@ import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.xml.client.DOMException;
+import com.shc.gwtal.client.enums.AudioContextState;
+import com.shc.gwtal.client.enums.AudioContextPlaybackCategory;
 import com.shc.gwtal.client.nodes.AnalyserNode;
 import com.shc.gwtal.client.nodes.AudioBufferSourceNode;
 import com.shc.gwtal.client.nodes.AudioDestinationNode;
@@ -145,16 +147,16 @@ public final class AudioContext extends JavaScriptObject
         return this.state;
     }-*/;
 
-    public State getState()
+    public AudioContextState getState()
     {
         String jsState = nGetState();
 
-        for (State state : State.values())
+        for (AudioContextState state : AudioContextState.values())
             if (state.getJsState().equalsIgnoreCase(jsState))
                 return state;
 
         // Unknown state, might be suspended
-        return State.SUSPENDED;
+        return AudioContextState.SUSPENDED;
     }
 
     public native Promise<AudioWorker> createAudioWorker(String scriptURL) /*-{
@@ -226,44 +228,6 @@ public final class AudioContext extends JavaScriptObject
         return this.createPanner();
     }-*/;
 
-    public enum State
-    {
-        SUSPENDED("suspended"),
-        RUNNING("running"),
-        CLOSED("closed");
-
-        private String jsState;
-
-        State(String jsState)
-        {
-            this.jsState = jsState;
-        }
-
-        public String getJsState()
-        {
-            return jsState;
-        }
-    }
-
-    public enum PlaybackCategory
-    {
-        BALANCED("balanced"),
-        INTERACTIVE("interactive"),
-        PLAYBACK("playback");
-
-        private String jsState;
-
-        PlaybackCategory(String jsState)
-        {
-            this.jsState = jsState;
-        }
-
-        public String getJsState()
-        {
-            return jsState;
-        }
-    }
-
     public interface DecodeSuccessCallback
     {
         void invoke(AudioBuffer decodedData);
@@ -276,6 +240,6 @@ public final class AudioContext extends JavaScriptObject
 
     public static class Options
     {
-        public PlaybackCategory playbackCategory = PlaybackCategory.INTERACTIVE;
+        public AudioContextPlaybackCategory playbackCategory = AudioContextPlaybackCategory.INTERACTIVE;
     }
 }
