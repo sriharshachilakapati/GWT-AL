@@ -18,6 +18,7 @@ import com.shc.gwtal.client.nodes.GainNode;
 import com.shc.gwtal.client.nodes.IIRFilterNode;
 import com.shc.gwtal.client.nodes.PannerNode;
 import com.shc.gwtal.client.nodes.ScriptProcessorNode;
+import com.shc.gwtal.client.nodes.SpatialPannerNode;
 import com.shc.gwtal.client.nodes.WaveShaperNode;
 
 /**
@@ -226,6 +227,10 @@ public final class AudioContext extends JavaScriptObject
 
     public native PannerNode createPanner() /*-{
         return this.createPanner();
+    }-*/;
+
+    public native SpatialPannerNode createSpatialPanner() /*-{
+        return this.createSpatialPanner();
     }-*/;
 
     public interface DecodeSuccessCallback
