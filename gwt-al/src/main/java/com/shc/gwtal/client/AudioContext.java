@@ -32,7 +32,12 @@ public final class AudioContext extends JavaScriptObject
 
     public static AudioContext create() throws AudioContextException
     {
-        AudioContext context = nCreate();
+        return create(new Options());
+    }
+
+    public static AudioContext create(Options options) throws AudioContextException
+    {
+        AudioContext context = nCreate(options.playbackCategory.getJsState());
 
         if (context == null)
             throw new AudioContextException("Error creating a context");
@@ -40,7 +45,7 @@ public final class AudioContext extends JavaScriptObject
         return context;
     }
 
-    private static native AudioContext nCreate() /*-{
+    private static native AudioContext nCreate(String playbackCategory) /*-{
         var contextClass = (
             $wnd.AudioContext
             || $wnd.webkitAudioContext
@@ -49,8 +54,12 @@ public final class AudioContext extends JavaScriptObject
             || $wnd.msAudioContext
         );
 
+        var options = {
+            playbackCategory: playbackCategory
+        };
+
         if (contextClass)
-            return new contextClass();
+            return new contextClass(options);
         else
             return null;
     }-*/;
