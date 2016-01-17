@@ -13,6 +13,8 @@ import com.shc.gwtal.client.nodes.AnalyserNode;
 import com.shc.gwtal.client.nodes.AudioBufferSourceNode;
 import com.shc.gwtal.client.nodes.AudioDestinationNode;
 import com.shc.gwtal.client.nodes.BiquadFilterNode;
+import com.shc.gwtal.client.nodes.ChannelSplitterNode;
+import com.shc.gwtal.client.nodes.ConvolverNode;
 import com.shc.gwtal.client.nodes.DelayNode;
 import com.shc.gwtal.client.nodes.GainNode;
 import com.shc.gwtal.client.nodes.IIRFilterNode;
@@ -245,6 +247,19 @@ public final class AudioContext extends JavaScriptObject
 
     public native StereoPannerNode createStereoPanner() /*-{
         return this.createStereoPanner();
+    }-*/;
+
+    public native ConvolverNode createConvolver() /*-{
+        return this.createConvolver();
+    }-*/;
+
+    public ChannelSplitterNode createChannelSplitter()
+    {
+        return createChannelSplitter(6);
+    }
+
+    public native ChannelSplitterNode createChannelSplitter(int numberOfOutputs) /*-{
+        return this.createChannelSplitter(numberOfOutputs);
     }-*/;
 
     public interface DecodeSuccessCallback
