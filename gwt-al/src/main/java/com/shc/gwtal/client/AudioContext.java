@@ -5,24 +5,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.typedarrays.shared.Float32Array;
 import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.xml.client.DOMException;
 import com.shc.gwtal.client.enums.AudioContextState;
 import com.shc.gwtal.client.enums.AudioContextPlaybackCategory;
-import com.shc.gwtal.client.nodes.AnalyserNode;
-import com.shc.gwtal.client.nodes.AudioBufferSourceNode;
-import com.shc.gwtal.client.nodes.AudioDestinationNode;
-import com.shc.gwtal.client.nodes.BiquadFilterNode;
-import com.shc.gwtal.client.nodes.ChannelSplitterNode;
-import com.shc.gwtal.client.nodes.ConvolverNode;
-import com.shc.gwtal.client.nodes.DelayNode;
-import com.shc.gwtal.client.nodes.GainNode;
-import com.shc.gwtal.client.nodes.IIRFilterNode;
-import com.shc.gwtal.client.nodes.PannerNode;
-import com.shc.gwtal.client.nodes.ScriptProcessorNode;
-import com.shc.gwtal.client.nodes.SpatialPannerNode;
-import com.shc.gwtal.client.nodes.StereoPannerNode;
-import com.shc.gwtal.client.nodes.WaveShaperNode;
+import com.shc.gwtal.client.nodes.*;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -40,7 +28,7 @@ public final class AudioContext extends JavaScriptObject
 
     public static AudioContext create(Options options) throws AudioContextException
     {
-        AudioContext context = nCreate(options.playbackCategory.getJsState());
+        AudioContext context = nCreate(options.toDictionary());
 
         if (context == null)
             throw new AudioContextException("Error creating a context");
@@ -48,7 +36,7 @@ public final class AudioContext extends JavaScriptObject
         return context;
     }
 
-    private static native AudioContext nCreate(String playbackCategory) /*-{
+    private static native AudioContext nCreate(DictionaryJSO options) /*-{
         var contextClass = (
             $wnd.AudioContext
             || $wnd.webkitAudioContext
@@ -56,10 +44,6 @@ public final class AudioContext extends JavaScriptObject
             || $wnd.oAudioContext
             || $wnd.msAudioContext
         );
-
-        var options = {
-            playbackCategory: playbackCategory
-        };
 
         if (contextClass)
             return new contextClass(options);
@@ -262,6 +246,33 @@ public final class AudioContext extends JavaScriptObject
         return this.createChannelSplitter(numberOfOutputs);
     }-*/;
 
+    public ChannelMergerNode createChannelMerger()
+    {
+        return createChannelMerger(6);
+    }
+
+    public native ChannelMergerNode createChannelMerger(int numberOfInputs) /*-{
+        return this.createChannelMerger(numberOfInputs);
+    }-*/;
+
+    public native DynamicsCompressorNode createDynamicsCompressor() /*-{
+        return this.createDynamicsCompressor();
+    }-*/;
+
+    public PeriodicWave createPeriodicWave(Float32Array real, Float32Array imag)
+    {
+        return createPeriodicWave(real, imag, new PeriodicWave.Constraints());
+    }
+
+    public PeriodicWave createPeriodicWave(Float32Array real, Float32Array imag, PeriodicWave.Constraints constraints)
+    {
+        return createPeriodicWave(real, imag, constraints.toDictionary());
+    }
+
+    private native PeriodicWave createPeriodicWave(Float32Array real, Float32Array imag, DictionaryJSO constraints) /*-{
+        return this.createPeriodicWave(real, imag, constraints);
+    }-*/;
+
     public interface DecodeSuccessCallback
     {
         void invoke(AudioBuffer decodedData);
@@ -275,5 +286,17 @@ public final class AudioContext extends JavaScriptObject
     public static class Options
     {
         public AudioContextPlaybackCategory playbackCategory = AudioContextPlaybackCategory.INTERACTIVE;
+
+        private DictionaryJSO dictionary;
+
+        DictionaryJSO toDictionary()
+        {
+            if (dictionary == null)
+                dictionary = DictionaryJSO.create();
+
+            dictionary.define("playbackCategory", playbackCategory.getJsState());
+
+            return dictionary;
+        }
     }
 }
