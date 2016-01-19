@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JsArrayNumber;
+import com.google.gwt.dom.client.MediaElement;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.typedarrays.shared.Float32Array;
 import com.google.gwt.typedarrays.shared.Float64Array;
@@ -271,6 +272,18 @@ public final class AudioContext extends JavaScriptObject
 
     private native PeriodicWave createPeriodicWave(Float32Array real, Float32Array imag, DictionaryJSO constraints) /*-{
         return this.createPeriodicWave(real, imag, constraints);
+    }-*/;
+
+    public native MediaElementAudioSourceNode createMediaElementSource(MediaElement mediaElement) /*-{
+        return this.createMediaElementSource(mediaElement);
+    }-*/;
+
+    public native MediaStreamAudioSourceNode createMediaStreamSource(JavaScriptObject mediaStream) /*-{
+        return this.createMediaStreamSource(mediaStream);
+    }-*/;
+
+    public native MediaStreamAudioDestinationNode createMediaStreamDestination() /*-{
+        return this.createMediaStreamDestination();
     }-*/;
 
     public interface DecodeSuccessCallback
