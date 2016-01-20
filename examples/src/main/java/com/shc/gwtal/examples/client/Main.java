@@ -6,10 +6,10 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.xhr.client.XMLHttpRequest;
-import com.shc.gwtal.client.AudioBuffer;
-import com.shc.gwtal.client.nodes.AudioBufferSourceNode;
-import com.shc.gwtal.client.AudioContext;
-import com.shc.gwtal.client.AudioContextException;
+import com.shc.gwtal.client.webaudio.AudioBuffer;
+import com.shc.gwtal.client.webaudio.nodes.AudioBufferSourceNode;
+import com.shc.gwtal.client.webaudio.AudioContext;
+import com.shc.gwtal.client.webaudio.AudioContextException;
 
 public class Main implements EntryPoint
 {
