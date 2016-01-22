@@ -5,8 +5,13 @@ import com.shc.gwtal.client.webaudio.AudioContextException;
 /**
  * @author Sri Harsha Chilakapati
  */
-public class AL
+public final class AL
 {
+    // Prevent instantiation
+    private AL()
+    {
+    }
+
     private static ALContext context;
 
     public static void create() throws AudioContextException

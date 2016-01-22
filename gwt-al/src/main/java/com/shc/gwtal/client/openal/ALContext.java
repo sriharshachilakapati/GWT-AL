@@ -6,7 +6,7 @@ import com.shc.gwtal.client.webaudio.AudioContextException;
 /**
  * @author Sri Harsha Chilakapati
  */
-public class ALContext
+public final class ALContext
 {
     private AudioContext context;
     private ALCCapabilities capabilities;
