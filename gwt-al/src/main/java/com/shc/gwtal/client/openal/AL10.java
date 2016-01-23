@@ -160,4 +160,33 @@ public final class AL10
             }
         });
     }
+
+    public static void alDeleteBuffers(int... bufferIDs)
+    {
+        for (int bufferID : bufferIDs)
+            if (BufferManager.isValid(bufferID))
+                BufferManager.deleteBuffer(bufferID);
+    }
+
+    public static int alGenSources()
+    {
+        return SourceManager.createSource();
+    }
+
+    public static int[] alGenSources(int n)
+    {
+        int[] sources = new int[n];
+
+        for (int i = 0; i < n; i++)
+            sources[i] = BufferManager.createBuffer();
+
+        return sources;
+    }
+
+    public static void alDeleteSources(int... sourceIDs)
+    {
+        for (int sourceID : sourceIDs)
+            if (SourceManager.isValid(sourceID))
+                SourceManager.deleteSource(sourceID);
+    }
 }

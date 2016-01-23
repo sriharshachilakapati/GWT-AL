@@ -8,13 +8,14 @@ import com.shc.gwtal.client.webaudio.AudioContext;
 import com.shc.gwtal.client.webaudio.Promise;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Sri Harsha Chilakapati
  */
-class BufferManager
+final class BufferManager
 {
-    private static HashMap<Integer, BufferManager> managers = new HashMap<>();
+    private static Map<Integer, BufferManager> managers = new HashMap<>();
 
     private static int nextBufferID = 1;
 
@@ -63,5 +64,10 @@ class BufferManager
                     }
                 }
         );
+    }
+
+    public static void deleteBuffer(int bufferID)
+    {
+        managers.remove(bufferID);
     }
 }
