@@ -168,6 +168,11 @@ public final class AL10
                 BufferManager.deleteBuffer(bufferID);
     }
 
+    public static int alIsBuffer(int bufferID)
+    {
+        return BufferManager.isValid(bufferID) ? AL_TRUE : AL_FALSE;
+    }
+
     public static int alGenSources()
     {
         return SourceManager.createSource();
@@ -188,5 +193,10 @@ public final class AL10
         for (int sourceID : sourceIDs)
             if (SourceManager.isValid(sourceID))
                 SourceManager.deleteSource(sourceID);
+    }
+
+    public static int alIsSource(int sourceID)
+    {
+        return SourceManager.isValid(sourceID) ? AL_TRUE : AL_FALSE;
     }
 }
