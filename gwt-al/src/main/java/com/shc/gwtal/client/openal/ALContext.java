@@ -15,6 +15,9 @@ public final class ALContext
     {
         this.context = context;
         capabilities = new ALCCapabilities();
+
+        // Create a state manager for this context
+        StateManager.create(this);
     }
 
     public static ALContext create() throws AudioContextException
@@ -35,5 +38,11 @@ public final class ALContext
     public ALCCapabilities getCapabilities()
     {
         return capabilities;
+    }
+
+    public void destroy()
+    {
+        context.close();
+        StateManager.destroy(this);
     }
 }

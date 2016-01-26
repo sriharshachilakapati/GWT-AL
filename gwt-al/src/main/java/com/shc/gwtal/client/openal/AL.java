@@ -26,7 +26,7 @@ public final class AL
 
     public static void destroy()
     {
-        context.getWebAudioContext().close();
+        context.destroy();
         context = null;
     }
 }
