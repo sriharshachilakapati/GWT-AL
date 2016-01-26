@@ -311,6 +311,6 @@ public final class AL10
                 return;
         }
 
-        alError = AL_INVALID_VALUE;
+        alError = AL_INVALID_ENUM;
     }
 }
