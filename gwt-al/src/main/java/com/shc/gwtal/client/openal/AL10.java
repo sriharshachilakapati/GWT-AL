@@ -164,7 +164,7 @@ public final class AL10
 
     public static int alGenBuffers()
     {
-        return BufferManager.createBuffer();
+        return StateManager.forContext(AL.getContext()).bufferManager.createBuffer();
     }
 
     public static int[] alGenBuffers(int n)
@@ -172,20 +172,20 @@ public final class AL10
         int[] buffers = new int[n];
 
         for (int i = 0; i < buffers.length; i++)
-            buffers[i] = BufferManager.createBuffer();
+            buffers[i] = StateManager.forContext(AL.getContext()).bufferManager.createBuffer();
 
         return buffers;
     }
 
     public static void alBufferData(int buffer, @UnusedParam int format, ArrayBuffer data, @UnusedParam int freq)
     {
-        if (!BufferManager.isValid(buffer))
+        if (!StateManager.forContext(AL.getContext()).bufferManager.isValid(buffer))
         {
             alError = AL_INVALID_VALUE;
             return;
         }
 
-        Promise<AudioBuffer> promise = BufferManager.forBuffer(buffer).bufferData(data);
+        Promise<AudioBuffer> promise = StateManager.forContext(AL.getContext()).bufferManager.getBuffer(buffer).bufferData(data);
         promise.onError(new Promise.OnRejected()
         {
             @Override
@@ -199,14 +199,16 @@ public final class AL10
 
     public static void alDeleteBuffers(int... bufferIDs)
     {
+        BufferManager bufferManager = StateManager.forContext(AL.getContext()).bufferManager;
+
         for (int bufferID : bufferIDs)
-            if (BufferManager.isValid(bufferID))
-                BufferManager.deleteBuffer(bufferID);
+            if (bufferManager.isValid(bufferID))
+                bufferManager.deleteBuffer(bufferID);
     }
 
     public static int alIsBuffer(int bufferID)
     {
-        return BufferManager.isValid(bufferID) ? AL_TRUE : AL_FALSE;
+        return StateManager.forContext(AL.getContext()).bufferManager.isValid(bufferID) ? AL_TRUE : AL_FALSE;
     }
 
     public static int alGenSources()
@@ -219,7 +221,7 @@ public final class AL10
         int[] sources = new int[n];
 
         for (int i = 0; i < n; i++)
-            sources[i] = BufferManager.createBuffer();
+            sources[i] = StateManager.forContext(AL.getContext()).bufferManager.createBuffer();
 
         return sources;
     }

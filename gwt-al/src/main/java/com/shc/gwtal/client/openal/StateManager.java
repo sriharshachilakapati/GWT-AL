@@ -17,6 +17,9 @@ final class StateManager
 {
     private static final Map<ALContext, StateManager> stateManagers = new HashMap<>();
 
+    public final BufferManager bufferManager = new BufferManager();
+    public final SourceManager sourceManager = new SourceManager();
+
     public AudioNode  inputNode;
     public GainNode   gainNode;
     public PannerNode pannerNode;
