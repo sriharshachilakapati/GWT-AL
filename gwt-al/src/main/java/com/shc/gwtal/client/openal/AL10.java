@@ -213,7 +213,7 @@ public final class AL10
 
     public static int alGenSources()
     {
-        return SourceManager.createSource();
+        return StateManager.forContext(AL.getContext()).sourceManager.createSource();
     }
 
     public static int[] alGenSources(int n)
@@ -229,13 +229,13 @@ public final class AL10
     public static void alDeleteSources(int... sourceIDs)
     {
         for (int sourceID : sourceIDs)
-            if (SourceManager.isValid(sourceID))
-                SourceManager.deleteSource(sourceID);
+            if (StateManager.forContext(AL.getContext()).sourceManager.isValid(sourceID))
+                StateManager.forContext(AL.getContext()).sourceManager.deleteSource(sourceID);
     }
 
     public static int alIsSource(int sourceID)
     {
-        return SourceManager.isValid(sourceID) ? AL_TRUE : AL_FALSE;
+        return StateManager.forContext(AL.getContext()).sourceManager.isValid(sourceID) ? AL_TRUE : AL_FALSE;
     }
 
     public static String alGetString(int paramName)

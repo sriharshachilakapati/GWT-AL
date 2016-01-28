@@ -8,28 +8,28 @@ import java.util.Map;
  */
 final class SourceManager
 {
-    private static Map<Integer, SourceManager> sourceManagers = new HashMap<>();
+    private Map<Integer, ALSource> sources = new HashMap<>();
 
-    private static int nextSourceID = 1;
+    private int nextSourceID = 1;
 
-    public static int createSource()
+    public int createSource()
     {
-        sourceManagers.put(nextSourceID, new SourceManager());
+        sources.put(nextSourceID, new ALSource());
         return nextSourceID++;
     }
 
-    public static SourceManager forSource(int sourceID)
+    public ALSource getSource(int sourceID)
     {
-        return sourceManagers.get(sourceID);
+        return sources.get(sourceID);
     }
 
-    public static boolean isValid(int sourceID)
+    public boolean isValid(int sourceID)
     {
-        return forSource(sourceID) != null;
+        return getSource(sourceID) != null;
     }
 
-    public static void deleteSource(int sourceID)
+    public void deleteSource(int sourceID)
     {
-        sourceManagers.remove(sourceID);
+        sources.remove(sourceID);
     }
 }
