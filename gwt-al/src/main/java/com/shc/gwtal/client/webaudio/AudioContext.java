@@ -9,8 +9,8 @@ import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.typedarrays.shared.Float32Array;
 import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.xml.client.DOMException;
-import com.shc.gwtal.client.webaudio.enums.AudioContextState;
 import com.shc.gwtal.client.webaudio.enums.AudioContextPlaybackCategory;
+import com.shc.gwtal.client.webaudio.enums.AudioContextState;
 import com.shc.gwtal.client.webaudio.nodes.*;
 
 /**
@@ -47,7 +47,15 @@ public final class AudioContext extends JavaScriptObject
         );
 
         if (contextClass)
-            return new contextClass(options);
+        {
+            var ctx = new contextClass(options);
+
+            // Old Web Audio API (e.g. Safari 6.0.5) had an inconsistently named createGainNode function.
+            if (typeof(ctx.createGain) === 'undefined')
+                ctx.createGain = ctx.createGainNode;
+
+            return ctx;
+        }
         else
             return null;
     }-*/;
