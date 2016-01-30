@@ -10,15 +10,15 @@ public final class AL
     {
     }
 
-    private static ALContext context;
+    private static ALContext currentContext;
 
-    public static ALContext getContext()
+    public static ALContext getCurrentContext()
     {
-        return context;
+        return currentContext;
     }
 
     public static void setCurrentContext(ALContext alContext)
     {
-        AL.context = alContext;
+        AL.currentContext = alContext;
     }
 }

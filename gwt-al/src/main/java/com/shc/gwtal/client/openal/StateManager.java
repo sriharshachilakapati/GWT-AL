@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.shc.gwtal.client.openal.AL10.*;
+
 /**
  * @author Sri Harsha Chilakapati
  */
@@ -27,11 +29,18 @@ final class StateManager
     public boolean gainEnabled;
     public boolean pannerEnabled;
 
+    private int error;
+
+    public int distanceModel;
+
     private AudioContext    context;
     private List<AudioNode> pipeline;
 
     private StateManager(AudioContext context)
     {
+        this.error = AL_NO_ERROR;
+        this.distanceModel = AL_INVERSE_DISTANCE_CLAMPED;
+
         this.context = context;
         this.pipeline = new ArrayList<>();
 
@@ -85,5 +94,26 @@ final class StateManager
         // Connect last node to destination
         node.disconnect();
         node.connect(context.getDestination());
+    }
+
+    public int getError()
+    {
+        int error = this.error;
+        this.error = AL_NO_ERROR;
+        return error;
+    }
+
+    public void setError(int error)
+    {
+        // The error should only be changed when the current recorded error is none. According to
+        // the section 2.7 of the OpenAL 1.1 Specification:
+        //
+        //     "When an error is detected by AL, a flag is set and the error code is recorded. Further
+        // errors, if they occur, do not affect this recorded code."
+        //
+        // As mentioned in the specification, we only set the error if there is no error recorded.
+
+        if (this.error != AL_NO_ERROR)
+            this.error = error;
     }
 }

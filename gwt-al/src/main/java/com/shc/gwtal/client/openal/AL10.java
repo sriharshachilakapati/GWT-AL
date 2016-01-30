@@ -8,6 +8,7 @@ import com.shc.gwtal.client.webaudio.enums.ChannelCountMode;
 import com.shc.gwtal.client.webaudio.enums.DistanceModelType;
 
 import static com.shc.gwtal.client.openal.AL11.*;
+import static com.shc.gwtal.client.openal.ALUtils.*;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -148,8 +149,6 @@ public final class AL10
             AL_PENDING   = 0x2011,
             AL_PROCESSED = 0x2012;
 
-    private static int alError = AL_NO_ERROR;
-
     // Prevent instantiation
     private AL10()
     {
@@ -157,49 +156,58 @@ public final class AL10
 
     public static int alGetError()
     {
-        int error = alError;
-        alError = AL_NO_ERROR;
-        return error;
+        if (AL.getCurrentContext() == null)
+            return AL_INVALID_OPERATION;
+
+        return getStateManager().getError();
     }
 
     public static int alGenBuffers()
     {
-        return StateManager.forContext(AL.getContext()).bufferManager.createBuffer();
+        if (AL.getCurrentContext() == null)
+            return 0;
+
+        return getBufferManager().createBuffer();
     }
 
     public static int[] alGenBuffers(int n)
     {
+        if (AL.getCurrentContext() == null)
+            return new int[n];  // Int array will be 0 by default
+
         int[] buffers = new int[n];
 
         for (int i = 0; i < buffers.length; i++)
-            buffers[i] = StateManager.forContext(AL.getContext()).bufferManager.createBuffer();
+            buffers[i] = getBufferManager().createBuffer();
 
         return buffers;
     }
 
     public static void alBufferData(int buffer, @UnusedParam int format, ArrayBuffer data, @UnusedParam int freq)
     {
-        if (!StateManager.forContext(AL.getContext()).bufferManager.isValid(buffer))
+        final StateManager stateManager = getStateManager();
+
+        if (!getBufferManager().isValid(buffer))
         {
-            alError = AL_INVALID_VALUE;
+            stateManager.setError(AL_INVALID_VALUE);
             return;
         }
 
-        Promise<AudioBuffer> promise = StateManager.forContext(AL.getContext()).bufferManager.getBuffer(buffer).bufferData(data);
+        Promise<AudioBuffer> promise = getBufferManager().getBuffer(buffer).bufferData(data);
         promise.onError(new Promise.OnRejected()
         {
             @Override
             public void invoke(Object reason)
             {
                 GWT.log(reason.toString());
-                alError = AL_INVALID_VALUE;
+                stateManager.setError(AL_INVALID_VALUE);
             }
         });
     }
 
     public static void alDeleteBuffers(int... bufferIDs)
     {
-        BufferManager bufferManager = StateManager.forContext(AL.getContext()).bufferManager;
+        BufferManager bufferManager = getBufferManager();
 
         for (int bufferID : bufferIDs)
             if (bufferManager.isValid(bufferID))
@@ -208,12 +216,12 @@ public final class AL10
 
     public static int alIsBuffer(int bufferID)
     {
-        return StateManager.forContext(AL.getContext()).bufferManager.isValid(bufferID) ? AL_TRUE : AL_FALSE;
+        return getBufferManager().isValid(bufferID) ? AL_TRUE : AL_FALSE;
     }
 
     public static int alGenSources()
     {
-        return StateManager.forContext(AL.getContext()).sourceManager.createSource();
+        return getSourceManager().createSource();
     }
 
     public static int[] alGenSources(int n)
@@ -221,21 +229,23 @@ public final class AL10
         int[] sources = new int[n];
 
         for (int i = 0; i < n; i++)
-            sources[i] = StateManager.forContext(AL.getContext()).bufferManager.createBuffer();
+            sources[i] = getSourceManager().createSource();
 
         return sources;
     }
 
     public static void alDeleteSources(int... sourceIDs)
     {
+        SourceManager sourceManager = getSourceManager();
+
         for (int sourceID : sourceIDs)
-            if (StateManager.forContext(AL.getContext()).sourceManager.isValid(sourceID))
-                StateManager.forContext(AL.getContext()).sourceManager.deleteSource(sourceID);
+            if (sourceManager.isValid(sourceID))
+                sourceManager.deleteSource(sourceID);
     }
 
     public static int alIsSource(int sourceID)
     {
-        return StateManager.forContext(AL.getContext()).sourceManager.isValid(sourceID) ? AL_TRUE : AL_FALSE;
+        return getSourceManager().isValid(sourceID) ? AL_TRUE : AL_FALSE;
     }
 
     public static String alGetString(int paramName)
@@ -253,21 +263,40 @@ public final class AL10
 
             case AL_EXTENSIONS:
                 return "";
+
+            case AL_NO_ERROR:
+                return "There is no current error";
+
+            case AL_INVALID_NAME:
+                return "Invalid name parameter";
+
+            case AL_INVALID_ENUM:
+                return "Invalid parameter";
+
+            case AL_INVALID_VALUE:
+                return "Invalid enum parameter value";
+
+            case AL_INVALID_OPERATION:
+                return "Illegal call";
+
+            case AL_OUT_OF_MEMORY:
+                return "Unable to allocate memory";
         }
 
-        alError = AL_INVALID_ENUM;
+        getStateManager().setError(AL_INVALID_ENUM);
         return null;
     }
 
     public static void alDistanceModel(int modelName)
     {
-        StateManager stateManager = StateManager.forContext(AL.getContext());
+        StateManager stateManager = getStateManager();
 
         switch (modelName)
         {
             case AL_NONE:
                 stateManager.pannerEnabled = false;
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
 
             case AL_INVERSE_DISTANCE:
@@ -275,6 +304,7 @@ public final class AL10
                 stateManager.pannerNode.setDistanceModel(DistanceModelType.INVERSE);
                 stateManager.pannerNode.setChannelCountMode(ChannelCountMode.MAX);
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
 
             case AL_INVERSE_DISTANCE_CLAMPED:
@@ -282,6 +312,7 @@ public final class AL10
                 stateManager.pannerNode.setDistanceModel(DistanceModelType.INVERSE);
                 stateManager.pannerNode.setChannelCountMode(ChannelCountMode.CLAMPED_MAX);
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
 
             case AL_LINEAR_DISTANCE:
@@ -289,6 +320,7 @@ public final class AL10
                 stateManager.pannerNode.setDistanceModel(DistanceModelType.LINEAR);
                 stateManager.pannerNode.setChannelCountMode(ChannelCountMode.MAX);
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
 
             case AL_LINEAR_DISTANCE_CLAMPED:
@@ -296,6 +328,7 @@ public final class AL10
                 stateManager.pannerNode.setDistanceModel(DistanceModelType.LINEAR);
                 stateManager.pannerNode.setChannelCountMode(ChannelCountMode.CLAMPED_MAX);
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
 
             case AL_EXPONENT_DISTANCE:
@@ -303,6 +336,7 @@ public final class AL10
                 stateManager.pannerNode.setDistanceModel(DistanceModelType.EXPONENTIAL);
                 stateManager.pannerNode.setChannelCountMode(ChannelCountMode.MAX);
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
 
             case AL_EXPONENT_DISTANCE_CLAMPED:
@@ -310,9 +344,10 @@ public final class AL10
                 stateManager.pannerNode.setDistanceModel(DistanceModelType.EXPONENTIAL);
                 stateManager.pannerNode.setChannelCountMode(ChannelCountMode.CLAMPED_MAX);
                 stateManager.updatePipeline();
+                stateManager.distanceModel = modelName;
                 return;
         }
 
-        alError = AL_INVALID_ENUM;
+        stateManager.setError(AL_INVALID_ENUM);
     }
 }

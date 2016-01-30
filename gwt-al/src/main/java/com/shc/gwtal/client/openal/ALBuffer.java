@@ -21,7 +21,7 @@ class ALBuffer
 
     public Promise<AudioBuffer> bufferData(ArrayBuffer arrayBuffer)
     {
-        return AL.getContext().getWebAudioContext().decodeAudioData(arrayBuffer,
+        return AL.getCurrentContext().getWebAudioContext().decodeAudioData(arrayBuffer,
                 new AudioContext.DecodeSuccessCallback()
                 {
                     @Override
