@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.xhr.client.XMLHttpRequest;
+import com.shc.gwtal.client.openal.AudioDecoder;
 import com.shc.gwtal.client.webaudio.AudioBuffer;
 import com.shc.gwtal.client.webaudio.nodes.AudioBufferSourceNode;
 import com.shc.gwtal.client.webaudio.AudioContext;
@@ -21,6 +22,12 @@ public class Main implements EntryPoint
     {
         try
         {
+            // Test media support in browser
+            GWT.log("MP3: " + AudioDecoder.isSupported(AudioDecoder.FileFormat.MP3));
+            GWT.log("WAV: " + AudioDecoder.isSupported(AudioDecoder.FileFormat.WAV));
+            GWT.log("OGG: " + AudioDecoder.isSupported(AudioDecoder.FileFormat.OGG));
+            GWT.log("WEBM: " + AudioDecoder.isSupported(AudioDecoder.FileFormat.WEBM));
+
             // Create an audio context
             AudioContext context = AudioContext.create();
 

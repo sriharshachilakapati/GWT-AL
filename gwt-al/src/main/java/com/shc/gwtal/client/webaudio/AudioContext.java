@@ -48,7 +48,20 @@ public final class AudioContext extends JavaScriptObject
 
         if (contextClass)
         {
-            var ctx = new contextClass(options);
+            var ctx;
+
+            try
+            {
+                ctx = new contextClass(options);
+            }
+            catch (e)
+            {
+                console.log(e);
+                console.warn("Retrying to create a context without options");
+
+                // Error might be due to no support to accept options to the context.
+                ctx = new contextClass();
+            }
 
             // Old Web Audio API (e.g. Safari 6.0.5) had an inconsistently named createGainNode function.
             if (typeof(ctx.createGain) === 'undefined')
