@@ -4,6 +4,11 @@ import com.google.gwt.dom.client.AudioElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.MediaElement;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.xml.client.DOMException;
+import com.shc.gwtal.client.webaudio.AudioBuffer;
+import com.shc.gwtal.client.webaudio.AudioContext;
+
+import static com.shc.gwtal.client.openal.ALUtils.*;
 
 /**
  * <p>A class useful for decoding the audio data from different file formats supported by the browser. Most common
@@ -14,8 +19,8 @@ import com.google.gwt.typedarrays.shared.ArrayBuffer;
  *         // MP3 is supported by the browser
  * </pre>
  *
- * <p>The work done by this class is done asynchronously. Note that there must be an active OpenAL context for this
- * class to work. Otherwise it will crash with possibly a {@link IllegalStateException}.</p>
+ * <p>The work done by this class is done asynchronously and the result is returned through a callback. It returns an
+ * integer which is the handle for an OpenAL buffer. To decode successfully, it needs a current context.</p>
  *
  * @author Sri Harsha Chilakapati
  */
@@ -50,6 +55,41 @@ public final class AudioDecoder
         return false;
     }
 
+    public static void decodeAudio(ArrayBuffer data, final OnDecoded onDecoded, final OnError onError)
+    {
+        if (AL.getCurrentContext() == null)
+            throw new IllegalStateException("Error, there must be an active OpenAL context to decode the audio.");
+
+        final AudioContext ctx = AL.getCurrentContext().getWebAudioContext();
+
+        ctx.decodeAudioData(
+                data,
+
+                new AudioContext.DecodeSuccessCallback()
+                {
+                    @Override
+                    public void invoke(AudioBuffer decodedData)
+                    {
+                        BufferManager bufferManager = getBufferManager();
+
+                        int bufferID = bufferManager.createBuffer();
+                        bufferManager.getBuffer(bufferID).setAudioBuffer(decodedData);
+
+                        onDecoded.invoke(bufferID);
+                    }
+                },
+
+                new AudioContext.DecodeErrorCallback()
+                {
+                    @Override
+                    public void invoke(DOMException error)
+                    {
+                        onError.invoke("" + error.getCode() + ": " + error.getMessage());
+                    }
+                }
+        );
+    }
+
     public enum FileFormat
     {
         MP3, WAV, OGG, WEBM
@@ -57,7 +97,7 @@ public final class AudioDecoder
 
     public interface OnDecoded
     {
-        void invoke(ArrayBuffer arrayBuffer, int alFormat, int frequency);
+        void invoke(int alBufferID);
     }
 
     public interface OnError

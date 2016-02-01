@@ -1,14 +1,19 @@
 package com.shc.gwtal.client.openal;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.typedarrays.client.DataViewNative;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.typedarrays.shared.DataView;
+import com.google.gwt.typedarrays.shared.Float32Array;
 import com.shc.gwtal.client.webaudio.AudioBuffer;
-import com.shc.gwtal.client.webaudio.Promise;
+import com.shc.gwtal.client.webaudio.AudioContext;
 import com.shc.gwtal.client.webaudio.enums.ChannelCountMode;
 import com.shc.gwtal.client.webaudio.enums.DistanceModelType;
 
+import java.util.ArrayList;
+
 import static com.shc.gwtal.client.openal.AL11.*;
 import static com.shc.gwtal.client.openal.ALUtils.*;
+import static com.shc.gwtal.client.openal.EXTFloat32.*;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -183,7 +188,12 @@ public final class AL10
         return buffers;
     }
 
-    public static void alBufferData(int buffer, @UnusedParam int format, ArrayBuffer data, @UnusedParam int freq)
+    public static void alBufferData(int buffer, int format, ArrayBuffer data, @UnusedParam int freq)
+    {
+        alBufferData(buffer, format, data, data.byteLength(), freq);
+    }
+
+    public static void alBufferData(int buffer, int format, ArrayBuffer data, int size, int freq)
     {
         final StateManager stateManager = getStateManager();
 
@@ -193,16 +203,89 @@ public final class AL10
             return;
         }
 
-        Promise<AudioBuffer> promise = getBufferManager().getBuffer(buffer).bufferData(data);
-        promise.onError(new Promise.OnRejected()
+        int bytes, channels;
+
+        switch (format)
         {
-            @Override
-            public void invoke(Object reason)
+            case AL_FORMAT_MONO8:
+                bytes = 1;
+                channels = 1;
+                break;
+
+            case AL_FORMAT_MONO16:
+                bytes = 2;
+                channels = 1;
+                break;
+
+            case AL_FORMAT_STEREO8:
+                bytes = 1;
+                channels = 2;
+                break;
+
+            case AL_FORMAT_STEREO16:
+                bytes = 2;
+                channels = 2;
+                break;
+
+            case AL_FORMAT_MONO_FLOAT32:
+                bytes = 4;
+                channels = 1;
+                break;
+
+            case AL_FORMAT_STEREO_FLOAT32:
+                bytes = 4;
+                channels = 2;
+                break;
+
+            default:
+                stateManager.setError(AL_INVALID_ENUM);
+                return;
+        }
+
+        BufferManager bufferManager = getBufferManager();
+        AudioContext ctx = AL.getCurrentContext().getWebAudioContext();
+
+        AudioBuffer audioBuffer;
+
+        try
+        {
+            audioBuffer = ctx.createBuffer(channels, size / (bytes * channels), freq);
+        }
+        catch (Exception e)
+        {
+            stateManager.setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        ArrayList<Float32Array> buf = new ArrayList<>();
+
+        for (int i = 0; i < channels; i++)
+            buf.add(audioBuffer.getChannelData(i));
+
+        DataView dataView = DataViewNative.create(data);
+
+        for (int i = 0; i < size / (bytes * channels); ++i)
+        {
+            for (int j = 0; j < channels; ++j)
             {
-                GWT.log(reason.toString());
-                stateManager.setError(AL_INVALID_VALUE);
+                switch (bytes)
+                {
+                    case 1:
+                        buf.get(j).set(i, -1.0f * dataView.getInt8(i * channels + j) * (2f / 256f));
+                        break;
+
+                    case 2:
+                        buf.get(j).set(i, dataView.getInt16(2 * (i * channels + j)) / 32768f);
+                        break;
+
+                    case 4:
+                        buf.get(j).set(i, dataView.getFloat32(4 * (i * channels + j)));
+                        break;
+                }
             }
-        });
+        }
+
+        bufferManager.getBuffer(buffer).setAudioBuffer(audioBuffer);
     }
 
     public static void alDeleteBuffers(int... bufferIDs)
