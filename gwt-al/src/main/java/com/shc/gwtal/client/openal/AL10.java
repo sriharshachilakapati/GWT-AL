@@ -121,7 +121,7 @@ public final class AL10
             AL_MAX_GAIN = 0x100E;
 
     /**
-     * Distance model attributes,
+     * Distance model attributes.
      */
     public static final int
             AL_REFERENCE_DISTANCE = 0x1020,
@@ -129,7 +129,7 @@ public final class AL10
             AL_MAX_DISTANCE       = 0x1023;
 
     /**
-     * Buffer attributes,
+     * Buffer attributes.
      */
     public static final int
             AL_FREQUENCY = 0x2001,
