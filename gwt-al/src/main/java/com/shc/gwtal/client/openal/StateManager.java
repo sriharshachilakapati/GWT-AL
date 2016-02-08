@@ -29,11 +29,12 @@ final class StateManager
     public boolean gainEnabled;
     public boolean pannerEnabled;
 
-    private int error;
-
     public int distanceModel;
 
-    private AudioContext    context;
+    public AudioContext context;
+
+    private int error;
+
     private List<AudioNode> pipeline;
 
     private StateManager(AudioContext context)
