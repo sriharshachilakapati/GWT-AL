@@ -22,6 +22,8 @@ final class StateManager
     public final BufferManager bufferManager = new BufferManager();
     public final SourceManager sourceManager = new SourceManager();
 
+    public final ALListener listener;
+
     public AudioNode  inputNode;
     public GainNode   gainNode;
     public PannerNode pannerNode;
@@ -52,6 +54,9 @@ final class StateManager
         // Create other nodes in this states too
         gainNode = context.createGain();
         pannerNode = context.createPanner();
+
+        // Create the listener
+        this.listener = new ALListener();
 
         updatePipeline();
     }
