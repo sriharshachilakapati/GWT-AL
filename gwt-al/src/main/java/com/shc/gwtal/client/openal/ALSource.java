@@ -27,6 +27,11 @@ class ALSource
     public float minGain = 0.0f;
     public float maxGain = 1.0f;
 
+    public float referralDistance = 1.0f;
+    public float rolloffFactor = 1.0f;
+    public float maxDistance = Float.MAX_VALUE;
+    public float pitch = 1.0f;
+
     public int buffersQueued = 0;
 
     public AudioBufferSourceNode sourceNode;
@@ -63,6 +68,10 @@ class ALSource
             pannerNode.setPosition(posX - listener.posX, posY - listener.posY, posZ - listener.posZ);
         else
             pannerNode.setPosition(posX, posY, posZ);
+
+        pannerNode.setRefDistance(Math.max(0, referralDistance));
+        pannerNode.setRolloffFactor(Math.max(0, rolloffFactor));
+        pannerNode.setMaxDistance(Math.max(0, maxDistance));
 
         pannerNode.setVelocity(velX, velY, velZ);
 
