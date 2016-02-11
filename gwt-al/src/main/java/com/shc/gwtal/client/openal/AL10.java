@@ -4,6 +4,7 @@ import com.google.gwt.typedarrays.client.DataViewNative;
 import com.google.gwt.typedarrays.shared.ArrayBuffer;
 import com.google.gwt.typedarrays.shared.DataView;
 import com.google.gwt.typedarrays.shared.Float32Array;
+import com.google.gwt.typedarrays.shared.Int32Array;
 import com.shc.gwtal.client.webaudio.AudioBuffer;
 import com.shc.gwtal.client.webaudio.AudioContext;
 import com.shc.gwtal.client.webaudio.enums.ChannelCountMode;
@@ -429,6 +430,341 @@ public final class AL10
                 stateManager.updatePipeline();
                 stateManager.distanceModel = modelName;
                 return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSource3f(int source, int param, float v1, float v2, float v3)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource sourceObject = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_TYPE:
+            case AL_BUFFERS_QUEUED:
+            case AL_BUFFERS_PROCESSED:
+                stateManager.setError(AL_INVALID_OPERATION);
+                return;
+
+            case AL_POSITION:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.posX = v1;
+                sourceObject.posY = v2;
+                sourceObject.posZ = v3;
+                sourceObject.update();
+                break;
+
+            case AL_VELOCITY:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.velX = v1;
+                sourceObject.velY = v2;
+                sourceObject.velZ = v3;
+                sourceObject.update();
+                break;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSourcef(int source, int param, float value)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource sourceObject = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_TYPE:
+            case AL_BUFFERS_QUEUED:
+            case AL_BUFFERS_PROCESSED:
+                stateManager.setError(AL_INVALID_OPERATION);
+                return;
+
+            case AL_GAIN:
+                sourceObject.gain = value;
+                sourceObject.update();
+                break;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSourcefv(int source, int param, Float32Array values)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource sourceObject = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_TYPE:
+            case AL_BUFFERS_QUEUED:
+            case AL_BUFFERS_PROCESSED:
+                stateManager.setError(AL_INVALID_OPERATION);
+                return;
+
+            case AL_POSITION:
+                if (!areAllFinite(values.get(0), values.get(1), values.get(2)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.posX = values.get(0);
+                sourceObject.posY = values.get(1);
+                sourceObject.posZ = values.get(2);
+                sourceObject.update();
+                break;
+
+            case AL_VELOCITY:
+                if (!areAllFinite(values.get(0), values.get(1), values.get(2)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.velX = values.get(0);
+                sourceObject.velY = values.get(1);
+                sourceObject.velZ = values.get(2);
+                sourceObject.update();
+                break;
+
+            case AL_GAIN:
+                sourceObject.gain = values.get(0);
+                sourceObject.update();
+                break;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSourceiv(int source, int param, Int32Array values)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource sourceObject = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_TYPE:
+            case AL_BUFFERS_QUEUED:
+            case AL_BUFFERS_PROCESSED:
+                stateManager.setError(AL_INVALID_OPERATION);
+                return;
+
+            case AL_POSITION:
+                if (!areAllFinite(values.get(0), values.get(1), values.get(2)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.posX = values.get(0);
+                sourceObject.posY = values.get(1);
+                sourceObject.posZ = values.get(2);
+                sourceObject.update();
+                break;
+
+            case AL_VELOCITY:
+                if (!areAllFinite(values.get(0), values.get(1), values.get(2)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.velX = values.get(0);
+                sourceObject.velY = values.get(1);
+                sourceObject.velZ = values.get(2);
+                sourceObject.update();
+                break;
+
+            case AL_SOURCE_RELATIVE:
+                int value = values.get(0);
+                if (value != AL_TRUE && value != AL_FALSE)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.sourceRelative = value;
+                sourceObject.update();
+                break;
+
+            case AL_LOOPING:
+                value = values.get(0);
+                if (value != AL_TRUE && value != AL_FALSE)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.looping = value;
+                sourceObject.update();
+                break;
+
+            case AL_BUFFER:
+                value = values.get(0);
+                switch (sourceObject.sourceState)
+                {
+                    case AL_PAUSED:
+                    case AL_PLAYING:
+                        stateManager.setError(AL_INVALID_OPERATION);
+                        return;
+                }
+                if (!getBufferManager().isValid(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.sourceState = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
+                sourceObject.buffer = value;
+                sourceObject.update();
+                break;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSourcei(int source, int param, int value)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource sourceObject = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_TYPE:
+            case AL_BUFFERS_QUEUED:
+            case AL_BUFFERS_PROCESSED:
+                stateManager.setError(AL_INVALID_OPERATION);
+                return;
+
+            case AL_SOURCE_RELATIVE:
+                if (value != AL_TRUE && value != AL_FALSE)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.sourceRelative = value;
+                sourceObject.update();
+                break;
+
+            case AL_LOOPING:
+                if (value != AL_TRUE && value != AL_FALSE)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.looping = value;
+                sourceObject.update();
+                break;
+
+            case AL_BUFFER:
+                switch (sourceObject.sourceState)
+                {
+                    case AL_PAUSED:
+                    case AL_PLAYING:
+                        stateManager.setError(AL_INVALID_OPERATION);
+                        return;
+                }
+                if (!getBufferManager().isValid(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.sourceState = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
+                sourceObject.buffer = value;
+                sourceObject.update();
+                break;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSource3i(int source, int param, int v1, int v2, int v3)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource sourceObject = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_TYPE:
+            case AL_BUFFERS_QUEUED:
+            case AL_BUFFERS_PROCESSED:
+                stateManager.setError(AL_INVALID_OPERATION);
+                return;
+
+            case AL_POSITION:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.posX = v1;
+                sourceObject.posY = v2;
+                sourceObject.posZ = v3;
+                sourceObject.update();
+                break;
+
+            case AL_VELOCITY:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.velX = v1;
+                sourceObject.velY = v2;
+                sourceObject.velZ = v3;
+                sourceObject.update();
+                break;
         }
 
         stateManager.setError(AL_INVALID_ENUM);

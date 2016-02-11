@@ -23,4 +23,18 @@ final class ALUtils
     {
         return getStateManager().sourceManager;
     }
+
+    public static boolean isFinite(float val)
+    {
+        return !Float.isInfinite(val) && !Float.isNaN(val);
+    }
+
+    public static boolean areAllFinite(float... val)
+    {
+        for (float v : val)
+            if (!isFinite(v))
+                return false;
+
+        return true;
+    }
 }
