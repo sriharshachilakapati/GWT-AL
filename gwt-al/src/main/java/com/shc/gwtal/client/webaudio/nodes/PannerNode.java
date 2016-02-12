@@ -69,7 +69,7 @@ public class PannerNode extends AudioNode
     }-*/;
 
     public final native void setRolloffFactor(float rolloffFactor) /*-{
-        this.rolloffFactor = rolloffFactorl;
+        this.rolloffFactor = rolloffFactor;
     }-*/;
 
     public final native float getConeInnerAngle() /*-{
