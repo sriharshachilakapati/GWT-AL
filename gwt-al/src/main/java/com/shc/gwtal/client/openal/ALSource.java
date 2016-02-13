@@ -1,6 +1,7 @@
 package com.shc.gwtal.client.openal;
 
 import com.shc.gwtal.client.webaudio.AudioContext;
+import com.shc.gwtal.client.webaudio.AudioEventHandler;
 import com.shc.gwtal.client.webaudio.nodes.AudioBufferSourceNode;
 import com.shc.gwtal.client.webaudio.nodes.GainNode;
 import com.shc.gwtal.client.webaudio.nodes.PannerNode;
@@ -17,7 +18,7 @@ class ALSource
     public float posX, posY, posZ;
     public float velX, velY, velZ;
 
-    public float gain;
+    public float gain = 1.0f;
 
     public int sourceRelative = AL_FALSE;
     public int sourceState    = AL_STOPPED;
@@ -29,15 +30,20 @@ class ALSource
     public float maxGain = 1.0f;
 
     public float referralDistance = 1.0f;
-    public float rolloffFactor = 1.0f;
-    public float maxDistance = Float.MAX_VALUE;
-    public float pitch = 1.0f;
+    public float rolloffFactor    = 1.0f;
+    public float maxDistance      = Float.MAX_VALUE;
+    public float pitch            = 1.0f;
 
     public int buffersQueued = 0;
 
     public AudioBufferSourceNode sourceNode;
     public PannerNode            pannerNode;
     public GainNode              outputNode;
+
+    private double bufferPosition = 0;
+    private double startTime;
+
+    private int buffersPlayed = 0;
 
     public ALSource()
     {
@@ -77,5 +83,90 @@ class ALSource
         pannerNode.setVelocity(velX, velY, velZ);
 
         outputNode.getGain().setValue(Math.min(maxGain, Math.max(minGain, gain)));
+    }
+
+    public void setSourceState(int state)
+    {
+        if (buffer == AL_NONE)
+        {
+            sourceState = AL_STOPPED;
+            bufferPosition = 0;
+            return;
+        }
+
+        StateManager stateManager = getStateManager();
+        AudioContext context = stateManager.context;
+
+        if (sourceNode != null)
+            sourceNode.disconnect();
+
+        if (state == AL_PLAYING)
+        {
+            if (sourceState != AL_PAUSED)
+            {
+                buffersPlayed = 0;
+                bufferPosition = 0;
+            }
+
+            int oldState = sourceState;
+
+            sourceState = AL_PLAYING;
+            sourceNode = context.createBufferSource();
+            sourceNode.setOnEnded(new AudioEventHandler()
+            {
+                @Override
+                public void invoke()
+                {
+                    if (looping == AL_FALSE)
+                    {
+                        // Set to stopped upon ended.
+                        setSourceState(AL_STOPPED);
+                    }
+                }
+            });
+
+            ALBuffer alBuffer = getBufferManager().getBuffer(buffer);
+
+            if (alBuffer.isReady())
+                sourceNode.setBuffer(alBuffer.audioBuffer);
+
+            update(); // Update the source, and set the properties
+
+            startTime = context.getCurrentTime();
+
+            if (oldState == AL_PAUSED)
+                sourceNode.start(0, bufferPosition % getBufferDuration());
+            else
+                sourceNode.start(0, 0);
+        }
+        else if (state == AL_STOPPED)
+        {
+            sourceState = AL_STOPPED;
+            bufferPosition = 0;
+
+            if (sourceNode == null)
+                return;
+
+            sourceNode.stop(0);
+            sourceNode = null;
+        }
+        else if (state == AL_PAUSED)
+        {
+            if (sourceNode == null)
+                return;
+
+            if (sourceState == AL_PLAYING)
+                bufferPosition += context.getCurrentTime() - startTime;
+
+            sourceState = AL_PAUSED;
+
+            sourceNode.stop(0);
+            sourceNode = null;
+        }
+    }
+
+    private double getBufferDuration()
+    {
+        return buffer == AL_NONE ? 0 : getBufferManager().getBuffer(buffer).audioBuffer.getDuration();
     }
 }

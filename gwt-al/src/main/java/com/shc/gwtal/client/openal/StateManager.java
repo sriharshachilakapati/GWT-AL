@@ -50,6 +50,7 @@ final class StateManager
         // Input node is a gain node with gain fixed as 1.0
         // used to give input to the pipeline.
         inputNode = context.createGain();
+        ((GainNode) inputNode).getGain().setValue(1.0f);
 
         // Create other nodes in this states too
         gainNode = context.createGain();

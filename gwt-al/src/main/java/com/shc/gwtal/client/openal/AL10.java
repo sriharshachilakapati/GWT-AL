@@ -286,7 +286,7 @@ public final class AL10
             }
         }
 
-        bufferManager.getBuffer(buffer).setAudioBuffer(audioBuffer);
+        bufferManager.getBuffer(buffer).audioBuffer = audioBuffer;
     }
 
     public static void alDeleteBuffers(int... bufferIDs)
@@ -768,5 +768,50 @@ public final class AL10
         }
 
         stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alSourcePlay(int source)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource src = sourceManager.getSource(source);
+        src.setSourceState(AL_PLAYING);
+    }
+
+    public static void alSourceStop(int source)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource src = sourceManager.getSource(source);
+        src.setSourceState(AL_STOPPED);
+    }
+
+    public static void alSourcePause(int source)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource src = sourceManager.getSource(source);
+        src.setSourceState(AL_PAUSED);
     }
 }

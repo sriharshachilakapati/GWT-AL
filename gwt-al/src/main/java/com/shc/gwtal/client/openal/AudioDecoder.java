@@ -73,7 +73,7 @@ public final class AudioDecoder
                         BufferManager bufferManager = getBufferManager();
 
                         int bufferID = bufferManager.createBuffer();
-                        bufferManager.getBuffer(bufferID).setAudioBuffer(decodedData);
+                        bufferManager.getBuffer(bufferID).audioBuffer = decodedData;
 
                         onDecoded.invoke(bufferID);
                     }

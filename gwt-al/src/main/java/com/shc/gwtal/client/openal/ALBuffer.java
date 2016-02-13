@@ -7,15 +7,10 @@ import com.shc.gwtal.client.webaudio.AudioBuffer;
  */
 class ALBuffer
 {
-    private AudioBuffer audioBuffer;
+    public AudioBuffer audioBuffer;
 
     public boolean isReady()
     {
         return audioBuffer != null;
-    }
-
-    public void setAudioBuffer(AudioBuffer audioBuffer)
-    {
-        this.audioBuffer = audioBuffer;
     }
 }
