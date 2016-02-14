@@ -670,7 +670,7 @@ public final class AL10
                     stateManager.setError(AL_INVALID_VALUE);
                     return;
                 }
-                sourceObject.sourceState = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
+                sourceObject.sourceType = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
                 sourceObject.buffer = value;
                 sourceObject.update();
                 return;
@@ -733,7 +733,7 @@ public final class AL10
                     stateManager.setError(AL_INVALID_VALUE);
                     return;
                 }
-                sourceObject.sourceState = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
+                sourceObject.sourceType = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
                 sourceObject.buffer = value;
                 sourceObject.update();
                 return;
