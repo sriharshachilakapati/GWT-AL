@@ -466,7 +466,7 @@ public final class AL10
                 sourceObject.posY = v2;
                 sourceObject.posZ = v3;
                 sourceObject.update();
-                break;
+                return;
 
             case AL_VELOCITY:
                 if (!areAllFinite(v1, v2, v3))
@@ -478,7 +478,7 @@ public final class AL10
                 sourceObject.velY = v2;
                 sourceObject.velZ = v3;
                 sourceObject.update();
-                break;
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -508,7 +508,17 @@ public final class AL10
             case AL_GAIN:
                 sourceObject.gain = value;
                 sourceObject.update();
-                break;
+                return;
+
+            case AL_PITCH:
+                if (value <= 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.pitch = value;
+                sourceObject.update();
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -545,7 +555,7 @@ public final class AL10
                 sourceObject.posY = values.get(1);
                 sourceObject.posZ = values.get(2);
                 sourceObject.update();
-                break;
+                return;
 
             case AL_VELOCITY:
                 if (!areAllFinite(values.get(0), values.get(1), values.get(2)))
@@ -557,12 +567,23 @@ public final class AL10
                 sourceObject.velY = values.get(1);
                 sourceObject.velZ = values.get(2);
                 sourceObject.update();
-                break;
+                return;
 
             case AL_GAIN:
                 sourceObject.gain = values.get(0);
                 sourceObject.update();
-                break;
+                return;
+
+            case AL_PITCH:
+                float value = values.get(0);
+                if (value <= 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.pitch = value;
+                sourceObject.update();
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -599,7 +620,7 @@ public final class AL10
                 sourceObject.posY = values.get(1);
                 sourceObject.posZ = values.get(2);
                 sourceObject.update();
-                break;
+                return;
 
             case AL_VELOCITY:
                 if (!areAllFinite(values.get(0), values.get(1), values.get(2)))
@@ -611,7 +632,7 @@ public final class AL10
                 sourceObject.velY = values.get(1);
                 sourceObject.velZ = values.get(2);
                 sourceObject.update();
-                break;
+                return;
 
             case AL_SOURCE_RELATIVE:
                 int value = values.get(0);
@@ -622,7 +643,7 @@ public final class AL10
                 }
                 sourceObject.sourceRelative = value;
                 sourceObject.update();
-                break;
+                return;
 
             case AL_LOOPING:
                 value = values.get(0);
@@ -633,7 +654,7 @@ public final class AL10
                 }
                 sourceObject.looping = value;
                 sourceObject.update();
-                break;
+                return;
 
             case AL_BUFFER:
                 value = values.get(0);
@@ -652,7 +673,7 @@ public final class AL10
                 sourceObject.sourceState = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
                 sourceObject.buffer = value;
                 sourceObject.update();
-                break;
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -687,7 +708,7 @@ public final class AL10
                 }
                 sourceObject.sourceRelative = value;
                 sourceObject.update();
-                break;
+                return;
 
             case AL_LOOPING:
                 if (value != AL_TRUE && value != AL_FALSE)
@@ -697,7 +718,7 @@ public final class AL10
                 }
                 sourceObject.looping = value;
                 sourceObject.update();
-                break;
+                return;
 
             case AL_BUFFER:
                 switch (sourceObject.sourceState)
@@ -715,7 +736,7 @@ public final class AL10
                 sourceObject.sourceState = value == AL_NONE ? AL_STATIC : AL_UNDETERMINED;
                 sourceObject.buffer = value;
                 sourceObject.update();
-                break;
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -752,7 +773,7 @@ public final class AL10
                 sourceObject.posY = v2;
                 sourceObject.posZ = v3;
                 sourceObject.update();
-                break;
+                return;
 
             case AL_VELOCITY:
                 if (!areAllFinite(v1, v2, v3))
@@ -764,7 +785,7 @@ public final class AL10
                 sourceObject.velY = v2;
                 sourceObject.velZ = v3;
                 sourceObject.update();
-                break;
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);

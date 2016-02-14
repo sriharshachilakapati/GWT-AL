@@ -120,7 +120,7 @@ final class StateManager
         //
         // As mentioned in the specification, we only set the error if there is no error recorded.
 
-        if (this.error != AL_NO_ERROR)
+        if (this.error == AL_NO_ERROR)
             this.error = error;
     }
 }

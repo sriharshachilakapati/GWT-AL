@@ -66,6 +66,7 @@ class ALSource
         if (sourceNode == null)
             return;
 
+        sourceNode.getPlaybackRate().setValue(pitch);
         sourceNode.connect(pannerNode);
         sourceNode.setLoop(looping == AL_TRUE);
 
