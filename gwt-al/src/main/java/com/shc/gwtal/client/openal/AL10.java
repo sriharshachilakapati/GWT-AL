@@ -479,6 +479,18 @@ public final class AL10
                 sourceObject.velZ = v3;
                 sourceObject.update();
                 return;
+
+            case AL_DIRECTION:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.dirX = v1;
+                sourceObject.dirY = v2;
+                sourceObject.dirZ = v3;
+                sourceObject.update();
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -517,6 +529,86 @@ public final class AL10
                     return;
                 }
                 sourceObject.pitch = value;
+                sourceObject.update();
+                return;
+
+            case AL_MAX_GAIN:
+                if (value < 0f || value > 1f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.maxGain = value;
+                sourceObject.update();
+                return;
+
+            case AL_MIN_GAIN:
+                if (value < 0f || value > 1f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.minGain = value;
+                sourceObject.update();
+                return;
+
+            case AL_REFERENCE_DISTANCE:
+                if (value < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.referralDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_ROLLOFF_FACTOR:
+                if (value < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.rolloffFactor = value;
+                sourceObject.update();
+                return;
+
+            case AL_MAX_DISTANCE:
+                if (value < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.maxDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_INNER_ANGLE:
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneInnerAngle = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_OUTER_ANGLE:
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneOuterAngle = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_OUTER_GAIN:
+                if (value < 0 || value > 1)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneOuterGain = value;
                 sourceObject.update();
                 return;
         }
@@ -574,14 +666,114 @@ public final class AL10
                 sourceObject.update();
                 return;
 
-            case AL_PITCH:
+            case AL_MAX_GAIN:
                 float value = values.get(0);
+                if (value < 0f || value > 1f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.maxGain = value;
+                sourceObject.update();
+                return;
+
+            case AL_MIN_GAIN:
+                value = values.get(0);
+                if (value < 0f || value > 1f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.minGain = value;
+                sourceObject.update();
+                return;
+
+            case AL_PITCH:
+                value = values.get(0);
                 if (value <= 0)
                 {
                     stateManager.setError(AL_INVALID_VALUE);
                     return;
                 }
                 sourceObject.pitch = value;
+                sourceObject.update();
+                return;
+
+            case AL_REFERENCE_DISTANCE:
+                value = values.get(0);
+                if (value < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.referralDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_ROLLOFF_FACTOR:
+                value = values.get(0);
+                if (value < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.rolloffFactor = value;
+                sourceObject.update();
+                return;
+
+            case AL_MAX_DISTANCE:
+                value = values.get(0);
+                if (value < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.maxDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_DIRECTION:
+                if (!areAllFinite(values.get(1), values.get(2), values.get(3)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.dirX = values.get(1);
+                sourceObject.dirY = values.get(2);
+                sourceObject.dirZ = values.get(3);
+                sourceObject.update();
+                return;
+
+            case AL_CONE_INNER_ANGLE:
+                value = values.get(0);
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneInnerAngle = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_OUTER_ANGLE:
+                value = values.get(0);
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneOuterAngle = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_OUTER_GAIN:
+                value = values.get(0);
+                if (value < 0 || value > 1)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneOuterGain = value;
                 sourceObject.update();
                 return;
         }
@@ -674,6 +866,73 @@ public final class AL10
                 sourceObject.buffer = value;
                 sourceObject.update();
                 return;
+
+            case AL_REFERENCE_DISTANCE:
+                value = values.get(0);
+                if (value < 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.referralDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_ROLLOFF_FACTOR:
+                value = values.get(0);
+                if (value < 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.rolloffFactor = value;
+                sourceObject.update();
+                return;
+
+            case AL_MAX_DISTANCE:
+                value = values.get(0);
+                if (value < 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.maxDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_DIRECTION:
+                if (!areAllFinite(values.get(1), values.get(2), values.get(3)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.dirX = values.get(1);
+                sourceObject.dirY = values.get(2);
+                sourceObject.dirZ = values.get(3);
+                sourceObject.update();
+                return;
+
+            case AL_CONE_INNER_ANGLE:
+                value = values.get(0);
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneInnerAngle = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_OUTER_ANGLE:
+                value = values.get(0);
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneOuterAngle = value;
+                sourceObject.update();
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -737,6 +996,56 @@ public final class AL10
                 sourceObject.buffer = value;
                 sourceObject.update();
                 return;
+
+            case AL_REFERENCE_DISTANCE:
+                if (value < 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.referralDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_ROLLOFF_FACTOR:
+                if (value < 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.rolloffFactor = value;
+                sourceObject.update();
+                return;
+
+            case AL_MAX_DISTANCE:
+                if (value < 0)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.maxDistance = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_INNER_ANGLE:
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneInnerAngle = value;
+                sourceObject.update();
+                return;
+
+            case AL_CONE_OUTER_ANGLE:
+                if (!isFinite(value))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.coneOuterAngle = value;
+                sourceObject.update();
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -784,6 +1093,18 @@ public final class AL10
                 sourceObject.velX = v1;
                 sourceObject.velY = v2;
                 sourceObject.velZ = v3;
+                sourceObject.update();
+                return;
+
+            case AL_DIRECTION:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                sourceObject.dirX = v1;
+                sourceObject.dirY = v2;
+                sourceObject.dirZ = v3;
                 sourceObject.update();
                 return;
         }

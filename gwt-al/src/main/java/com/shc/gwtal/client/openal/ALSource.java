@@ -17,6 +17,11 @@ class ALSource
 {
     public float posX, posY, posZ;
     public float velX, velY, velZ;
+    public float dirX, dirY, dirZ;
+
+    public float coneInnerAngle = 360f;
+    public float coneOuterAngle = 360f;
+    public float coneOuterGain  = 0.0f;
 
     public float gain = 1.0f;
 
@@ -82,6 +87,11 @@ class ALSource
         pannerNode.setMaxDistance(Math.max(0, maxDistance));
 
         pannerNode.setVelocity(velX, velY, velZ);
+        pannerNode.setOrientation(dirX, dirY, dirZ);
+
+        pannerNode.setConeInnerAngle(coneInnerAngle);
+        pannerNode.setConeOuterAngle(coneOuterAngle);
+        pannerNode.setConeOuterGain(Math.min(Math.max(coneOuterGain, 0.0f), 1.0f));
 
         outputNode.getGain().setValue(Math.min(maxGain, Math.max(minGain, gain)));
     }
