@@ -40,7 +40,7 @@ public class Main implements EntryPoint
         GWT.log("OGG: " + AudioDecoder.isSupported(AudioDecoder.FileFormat.OGG));
         GWT.log("WEBM: " + AudioDecoder.isSupported(AudioDecoder.FileFormat.WEBM));
 
-        String url = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Demo_chorus.ogg";
+        String url = Resources.INSTANCE.music().getSafeUri().asString();
 
         // Create an XMLHttpRequest to load the file from URL
         XMLHttpRequest request = XMLHttpRequest.create();

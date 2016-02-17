@@ -37,10 +37,6 @@ task superDev(type: de.richsource.gradle.plugins.gwt.GwtSuperDev) {
     }
 }
 
-war {
-    from sourceSets.main.resources
-}
-
 task addSource << {
 	sourceSets.main.compileClasspath += files(project(':gwt-al').sourceSets.main.allSource)
 }
