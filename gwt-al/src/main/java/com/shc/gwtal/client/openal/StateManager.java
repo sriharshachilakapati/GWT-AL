@@ -57,7 +57,7 @@ final class StateManager
         pannerNode = context.createPanner();
 
         // Create the listener
-        this.listener = new ALListener();
+        this.listener = new ALListener(context);
 
         updatePipeline();
     }
@@ -98,9 +98,12 @@ final class StateManager
             node = pipelineNode;
         }
 
-        // Connect last node to destination
+        // Connect last node to listener
         node.disconnect();
-        node.connect(context.getDestination());
+        node.connect(listener.inputNode);
+
+        // Connect listener to destination
+        listener.inputNode.connect(context.getDestination());
     }
 
     public int getError()
