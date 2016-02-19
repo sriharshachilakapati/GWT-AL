@@ -1156,4 +1156,212 @@ public final class AL10
         ALSource src = sourceManager.getSource(source);
         src.setSourceState(AL_PAUSED);
     }
+
+    public static void alGetSource3f(int source, int param, ArrayBuffer v1, ArrayBuffer v2, ArrayBuffer v3)
+    {
+        alGetSource3f(source, param, DataViewNative.create(v1), DataViewNative.create(v2), DataViewNative.create(v3));
+    }
+
+    public static void alGetSource3f(int source, int param, DataView v1, DataView v2, DataView v3)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        // Ensure buffer size for a float
+        if (hasEnoughBytes(v1, SIZEOF_FLOAT) ||
+            hasEnoughBytes(v2, SIZEOF_FLOAT) ||
+            hasEnoughBytes(v3, SIZEOF_FLOAT))
+        {
+            stateManager.setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        // TODO: Implement this method
+    }
+
+    public static float alGetSourcef(int source, int param)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return 0;
+        }
+
+        ALSource alSource = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_MIN_GAIN:
+                return alSource.minGain;
+
+            case AL_MAX_GAIN:
+                return alSource.maxGain;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+        return 0;
+    }
+
+    public static void alGetSourcef(int source, int param, DataView value)
+    {
+        // Ensure buffer size for a float
+        if (hasEnoughBytes(value, SIZEOF_FLOAT))
+        {
+            getStateManager().setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        value.setFloat32(0, alGetSourcef(source, param));
+    }
+
+    public static void alGetSourcef(int source, int param, ArrayBuffer value)
+    {
+        alGetSourcef(source, param, DataViewNative.create(value));
+    }
+
+    public static void alGetSourcefv(int source, int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource alSource = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_MIN_GAIN:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.minGain);
+                return;
+
+            case AL_MAX_GAIN:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.maxGain);
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetSourcefv(int source, int param, ArrayBuffer values)
+    {
+        alGetSourcefv(source, param, DataViewNative.create(values));
+    }
+
+    public static float alGetSourcei(int source, int param)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return 0;
+        }
+
+        ALSource alSource = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_RELATIVE:
+                return alSource.sourceRelative;
+
+            case AL_SOURCE_TYPE:
+                return alSource.sourceType;
+
+            case AL_LOOPING:
+                return alSource.looping;
+
+            case AL_BUFFER:
+                return alSource.buffer;
+
+            case AL_BUFFERS_QUEUED:
+                return alSource.buffersQueued;
+
+            case AL_BUFFERS_PROCESSED:
+                return alSource.buffersProcessed;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+        return 0;
+    }
+
+    public static void alGetSourcei(int source, int param, DataView value)
+    {
+        // Ensure buffer size for a float
+        if (hasEnoughBytes(value, SIZEOF_FLOAT))
+        {
+            getStateManager().setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        value.setFloat32(0, alGetSourcei(source, param));
+    }
+
+    public static void alGetSourcei(int source, int param, ArrayBuffer value)
+    {
+        alGetSourcei(source, param, DataViewNative.create(value));
+    }
+
+    public static void alGetSourceiv(int source, int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource alSource = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_SOURCE_RELATIVE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, alSource.sourceRelative);
+                return;
+
+            case AL_SOURCE_TYPE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, alSource.sourceType);
+                return;
+
+            case AL_LOOPING:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, alSource.looping);
+                return;
+
+            case AL_BUFFER:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, alSource.buffer);
+                return;
+
+            case AL_BUFFERS_QUEUED:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, alSource.buffersQueued);
+                return;
+
+            case AL_BUFFERS_PROCESSED:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, alSource.buffersProcessed);
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetSourceiv(int source, int param, ArrayBuffer values)
+    {
+        alGetSourceiv(source, param, DataViewNative.create(values));
+    }
 }

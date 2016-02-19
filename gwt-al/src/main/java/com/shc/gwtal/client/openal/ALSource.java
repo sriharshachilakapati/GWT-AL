@@ -49,6 +49,7 @@ class ALSource
     private double startTime;
 
     private int buffersPlayed = 0;
+    public int buffersProcessed = 0;
 
     public ALSource()
     {
