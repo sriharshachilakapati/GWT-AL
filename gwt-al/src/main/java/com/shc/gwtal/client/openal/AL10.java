@@ -1199,6 +1199,9 @@ public final class AL10
 
             case AL_MAX_GAIN:
                 return alSource.maxGain;
+
+            case AL_REFERENCE_DISTANCE:
+                return alSource.referralDistance;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -1246,6 +1249,16 @@ public final class AL10
                 if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
                     values.setFloat32(0, alSource.maxGain);
                 return;
+
+            case AL_REFERENCE_DISTANCE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.referralDistance);
+                return;
+
+            case AL_ROLLOFF_FACTOR:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.rolloffFactor);
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -1256,7 +1269,7 @@ public final class AL10
         alGetSourcefv(source, param, DataViewNative.create(values));
     }
 
-    public static float alGetSourcei(int source, int param)
+    public static int alGetSourcei(int source, int param)
     {
         StateManager stateManager = getStateManager();
         SourceManager sourceManager = getSourceManager();
@@ -1288,6 +1301,12 @@ public final class AL10
 
             case AL_BUFFERS_PROCESSED:
                 return alSource.buffersProcessed;
+
+            case AL_REFERENCE_DISTANCE:
+                return (int) alSource.referralDistance;
+
+            case AL_ROLLOFF_FACTOR:
+                return (int) alSource.rolloffFactor;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -1303,7 +1322,7 @@ public final class AL10
             return;
         }
 
-        value.setFloat32(0, alGetSourcei(source, param));
+        value.setInt32(0, alGetSourcei(source, param));
     }
 
     public static void alGetSourcei(int source, int param, ArrayBuffer value)
@@ -1354,6 +1373,16 @@ public final class AL10
             case AL_BUFFERS_PROCESSED:
                 if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
                     values.setInt32(0, alSource.buffersProcessed);
+                return;
+
+            case AL_REFERENCE_DISTANCE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, (int) alSource.referralDistance);
+                return;
+
+            case AL_ROLLOFF_FACTOR:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, (int) alSource.rolloffFactor);
                 return;
         }
 

@@ -48,7 +48,6 @@ class ALSource
     private double bufferPosition = 0;
     private double startTime;
 
-    private int buffersPlayed = 0;
     public int buffersProcessed = 0;
 
     public ALSource()
@@ -116,7 +115,7 @@ class ALSource
         {
             if (sourceState != AL_PAUSED)
             {
-                buffersPlayed = 0;
+                buffersProcessed = 0;
                 bufferPosition = 0;
             }
 
