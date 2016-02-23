@@ -103,7 +103,7 @@ final class StateManager
         node.connect(listener.inputNode);
 
         // Connect listener to destination
-        listener.inputNode.connect(context.getDestination());
+        listener.outputNode.connect(context.getDestination());
     }
 
     public int getError()
