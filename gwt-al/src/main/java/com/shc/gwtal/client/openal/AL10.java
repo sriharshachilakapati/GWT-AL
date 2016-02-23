@@ -1176,7 +1176,75 @@ public final class AL10
             return;
         }
 
-        // TODO: Implement this method
+        ALSource alSource = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_DIRECTION:
+                v1.setFloat32(0, alSource.dirX);
+                v2.setFloat32(0, alSource.dirY);
+                v3.setFloat32(0, alSource.dirZ);
+                return;
+
+            case AL_POSITION:
+                v1.setFloat32(0, alSource.posX);
+                v2.setFloat32(0, alSource.posY);
+                v3.setFloat32(0, alSource.posZ);
+                return;
+
+            case AL_VELOCITY:
+                v1.setFloat32(0, alSource.velX);
+                v2.setFloat32(0, alSource.velY);
+                v3.setFloat32(0, alSource.velZ);
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetSource3i(int source, int param, ArrayBuffer v1, ArrayBuffer v2, ArrayBuffer v3)
+    {
+        alGetSource3i(source, param, DataViewNative.create(v1), DataViewNative.create(v2), DataViewNative.create(v3));
+    }
+
+    public static void alGetSource3i(int source, int param, DataView v1, DataView v2, DataView v3)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        // Ensure buffer size for an int
+        if (hasEnoughBytes(v1, SIZEOF_INT) ||
+            hasEnoughBytes(v2, SIZEOF_INT) ||
+            hasEnoughBytes(v3, SIZEOF_INT))
+        {
+            stateManager.setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        ALSource alSource = sourceManager.getSource(source);
+
+        switch (param)
+        {
+            case AL_DIRECTION:
+                v1.setInt32(0, (int) alSource.dirX);
+                v2.setInt32(0, (int) alSource.dirY);
+                v3.setInt32(0, (int) alSource.dirZ);
+                return;
+
+            case AL_POSITION:
+                v1.setInt32(0, (int) alSource.posX);
+                v2.setInt32(0, (int) alSource.posY);
+                v3.setInt32(0, (int) alSource.posZ);
+                return;
+
+            case AL_VELOCITY:
+                v1.setInt32(0, (int) alSource.velX);
+                v2.setInt32(0, (int) alSource.velY);
+                v3.setInt32(0, (int) alSource.velZ);
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
     }
 
     public static float alGetSourcef(int source, int param)
@@ -1202,6 +1270,27 @@ public final class AL10
 
             case AL_REFERENCE_DISTANCE:
                 return alSource.referralDistance;
+
+            case AL_ROLLOFF_FACTOR:
+                return alSource.rolloffFactor;
+
+            case AL_MAX_DISTANCE:
+                return alSource.maxDistance;
+
+            case AL_PITCH:
+                return alSource.pitch;
+
+            case AL_CONE_INNER_ANGLE:
+                return alSource.coneInnerAngle;
+
+            case AL_CONE_OUTER_ANGLE:
+                return alSource.coneOuterAngle;
+
+            case AL_CONE_OUTER_GAIN:
+                return alSource.coneOuterGain;
+
+            case AL_GAIN:
+                return alSource.gain;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -1259,6 +1348,63 @@ public final class AL10
                 if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
                     values.setFloat32(0, alSource.rolloffFactor);
                 return;
+
+            case AL_MAX_DISTANCE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.maxDistance);
+                return;
+
+            case AL_PITCH:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.pitch);
+                return;
+
+            case AL_DIRECTION:
+                if (!checkSetError(!hasEnoughBytes(values, 3 * SIZEOF_FLOAT), AL_INVALID_VALUE))
+                {
+                    values.setFloat32(0, alSource.dirX);
+                    values.setFloat32(SIZEOF_FLOAT, alSource.dirY);
+                    values.setFloat32(2 * SIZEOF_FLOAT, alSource.dirZ);
+                }
+                return;
+
+            case AL_CONE_INNER_ANGLE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.coneInnerAngle);
+                return;
+
+            case AL_CONE_OUTER_ANGLE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.coneOuterAngle);
+                return;
+
+            case AL_CONE_OUTER_GAIN:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.coneOuterGain);
+                return;
+
+            case AL_POSITION:
+                if (!checkSetError(!hasEnoughBytes(values, 3 * SIZEOF_FLOAT), AL_INVALID_VALUE))
+                {
+                    values.setFloat32(0, alSource.posX);
+                    values.setFloat32(SIZEOF_FLOAT, alSource.posY);
+                    values.setFloat32(2 * SIZEOF_FLOAT, alSource.posZ);
+                }
+                return;
+
+            case AL_VELOCITY:
+                if (!checkSetError(!hasEnoughBytes(values, 3 * SIZEOF_FLOAT), AL_INVALID_VALUE))
+                {
+                    values.setFloat32(0, alSource.velX);
+                    values.setFloat32(SIZEOF_FLOAT, alSource.velY);
+                    values.setFloat32(2 * SIZEOF_FLOAT, alSource.velZ);
+                }
+                return;
+
+            case AL_GAIN:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, alSource.gain);
+                return;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -1307,6 +1453,15 @@ public final class AL10
 
             case AL_ROLLOFF_FACTOR:
                 return (int) alSource.rolloffFactor;
+
+            case AL_MAX_DISTANCE:
+                return (int) alSource.maxDistance;
+
+            case AL_CONE_INNER_ANGLE:
+                return (int) alSource.coneInnerAngle;
+
+            case AL_CONE_OUTER_ANGLE:
+                return (int) alSource.coneOuterAngle;
         }
 
         stateManager.setError(AL_INVALID_ENUM);
@@ -1383,6 +1538,48 @@ public final class AL10
             case AL_ROLLOFF_FACTOR:
                 if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
                     values.setInt32(0, (int) alSource.rolloffFactor);
+                return;
+
+            case AL_MAX_DISTANCE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, (int) alSource.maxDistance);
+                return;
+
+            case AL_DIRECTION:
+                if (!checkSetError(!hasEnoughBytes(values, 3 * SIZEOF_INT), AL_INVALID_VALUE))
+                {
+                    values.setInt32(0, (int) alSource.dirX);
+                    values.setInt32(SIZEOF_INT, (int) alSource.dirY);
+                    values.setInt32(2 * SIZEOF_INT, (int) alSource.dirZ);
+                }
+                return;
+
+            case AL_CONE_INNER_ANGLE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, (int) alSource.coneInnerAngle);
+                return;
+
+            case AL_CONE_OUTER_ANGLE:
+                if (!checkSetError(!hasEnoughBytes(values, SIZEOF_INT), AL_INVALID_VALUE))
+                    values.setInt32(0, (int) alSource.coneOuterAngle);
+                return;
+
+            case AL_POSITION:
+                if (!checkSetError(!hasEnoughBytes(values, 3 * SIZEOF_INT), AL_INVALID_VALUE))
+                {
+                    values.setInt32(0, (int) alSource.posX);
+                    values.setInt32(SIZEOF_INT, (int) alSource.posY);
+                    values.setInt32(2 * SIZEOF_INT, (int) alSource.posZ);
+                }
+                return;
+
+            case AL_VELOCITY:
+                if (!checkSetError(!hasEnoughBytes(values, 3 * SIZEOF_INT), AL_INVALID_VALUE))
+                {
+                    values.setInt32(0, (int) alSource.velX);
+                    values.setInt32(SIZEOF_INT, (int) alSource.velY);
+                    values.setInt32(2 * SIZEOF_INT, (int) alSource.velZ);
+                }
                 return;
         }
 

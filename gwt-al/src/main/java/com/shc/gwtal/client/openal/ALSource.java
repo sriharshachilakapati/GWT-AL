@@ -26,7 +26,7 @@ class ALSource
     public float gain = 1.0f;
 
     public int sourceRelative = AL_FALSE;
-    public int sourceState    = AL_STOPPED;
+    public int sourceState    = AL_INITIAL;
     public int sourceType     = AL_UNDETERMINED;
     public int looping        = AL_FALSE;
     public int buffer         = AL_NONE;
