@@ -174,6 +174,8 @@ class ALSource
             sourceNode.stop(0);
             sourceNode = null;
         }
+        else if (state == AL_INITIAL)
+            sourceState = AL_INITIAL;
     }
 
     private double getBufferDuration()

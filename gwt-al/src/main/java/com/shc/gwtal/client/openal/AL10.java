@@ -1157,6 +1157,71 @@ public final class AL10
         src.setSourceState(AL_PAUSED);
     }
 
+    public static void alSourceRewind(int source)
+    {
+        StateManager stateManager = getStateManager();
+        SourceManager sourceManager = getSourceManager();
+
+        if (!sourceManager.isValid(source))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        ALSource src = sourceManager.getSource(source);
+
+        src.setSourceState(AL_STOPPED);
+        src.setSourceState(AL_INITIAL);
+    }
+
+    public static void alSourcePlayv(int n, int[] sNames)
+    {
+        for (int i = 0; i < n; i++)
+            alSourcePlay(sNames[i]);
+    }
+
+    public static void alSourcePausev(int n, int[] sNames)
+    {
+        for (int i = 0; i < n; i++)
+            alSourcePause(sNames[i]);
+    }
+
+    public static void alSourceStopv(int n, int[] sNames)
+    {
+        for (int i = 0; i < n; i++)
+            alSourceStop(sNames[i]);
+    }
+
+    public static void alSourceRewindv(int n, int[] sNames)
+    {
+        for (int i = 0; i < n; i++)
+            alSourceRewind(sNames[i]);
+    }
+
+    public static void alSourcePlayv(int... sNames)
+    {
+        for (int source : sNames)
+            alSourcePlay(source);
+    }
+
+    public static void alSourcePausev(int... sNames)
+    {
+        for (int source : sNames)
+            alSourcePause(source);
+    }
+
+    public static void alSourceStopv(int... sNames)
+    {
+        for (int source : sNames)
+            alSourceStop(source);
+    }
+
+    public static void alSourceRewindv(int... sNames)
+    {
+        for (int source : sNames)
+            alSourceRewind(source);
+    }
+
     public static void alGetSource3f(int source, int param, ArrayBuffer v1, ArrayBuffer v2, ArrayBuffer v3)
     {
         alGetSource3f(source, param, DataViewNative.create(v1), DataViewNative.create(v2), DataViewNative.create(v3));
