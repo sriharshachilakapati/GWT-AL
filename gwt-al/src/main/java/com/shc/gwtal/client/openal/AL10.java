@@ -1655,4 +1655,271 @@ public final class AL10
     {
         alGetSourceiv(source, param, DataViewNative.create(values));
     }
+
+    public static void alListener3f(int param, float v1, float v2, float v3)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_POSITION:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.posX = v1;
+                listener.posY = v2;
+                listener.posZ = v3;
+                listener.update();
+                return;
+
+            case AL_VELOCITY:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.velX = v1;
+                listener.velY = v2;
+                listener.velZ = v3;
+                listener.update();
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alListenerf(int param, float v)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_GAIN:
+                if (v < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.gain = v;
+                listener.update();
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alListenerfv(int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_POSITION:
+                if (!hasEnoughBytes(values, 3 * SIZEOF_FLOAT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                if (!areAllFinite(values.getFloat32(0), values.getFloat32(SIZEOF_FLOAT), values.getFloat32(2 * SIZEOF_FLOAT)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.posX = values.getFloat32(0);
+                listener.posY = values.getFloat32(SIZEOF_FLOAT);
+                listener.posZ = values.getFloat32(2 * SIZEOF_FLOAT);
+                listener.update();
+                return;
+
+            case AL_VELOCITY:
+                if (!hasEnoughBytes(values, 3 * SIZEOF_FLOAT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                if (!areAllFinite(values.getFloat32(0), values.getFloat32(SIZEOF_FLOAT), values.getFloat32(2 * SIZEOF_FLOAT)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.velX = values.getFloat32(0);
+                listener.velY = values.getFloat32(SIZEOF_FLOAT);
+                listener.velZ = values.getFloat32(2 * SIZEOF_FLOAT);
+                listener.update();
+                return;
+
+            case AL_GAIN:
+                if (!hasEnoughBytes(values, SIZEOF_FLOAT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                if (values.getFloat32(0) < 0f)
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.gain = values.getFloat32(0);
+                listener.update();
+                return;
+
+            case AL_ORIENTATION:
+                if (!hasEnoughBytes(values, 6 * SIZEOF_FLOAT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                float v0 = values.getFloat32(0);
+                float v1 = values.getFloat32(SIZEOF_FLOAT);
+                float v2 = values.getFloat32(2 * SIZEOF_FLOAT);
+                float v3 = values.getFloat32(3 * SIZEOF_FLOAT);
+                float v4 = values.getFloat32(4 * SIZEOF_FLOAT);
+                float v5 = values.getFloat32(5 * SIZEOF_FLOAT);
+                if (!areAllFinite(v0, v1, v2, v3, v4, v5))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.orientationAtX = v0;
+                listener.orientationAtY = v1;
+                listener.orientationAtZ = v2;
+                listener.orientationUpX = v3;
+                listener.orientationUpY = v4;
+                listener.orientationUpZ = v5;
+                listener.update();
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alListenerfv(int param, ArrayBuffer values)
+    {
+        alListenerfv(param, DataViewNative.create(values));
+    }
+
+    public static void alListener3i(int param, int v1, int v2, int v3)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_POSITION:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.posX = v1;
+                listener.posY = v2;
+                listener.posZ = v3;
+                listener.update();
+                return;
+
+            case AL_VELOCITY:
+                if (!areAllFinite(v1, v2, v3))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.velX = v1;
+                listener.velY = v2;
+                listener.velZ = v3;
+                listener.update();
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alListeneri(int param, int v)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alListeneriv(int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_POSITION:
+                if (!hasEnoughBytes(values, 3 * SIZEOF_INT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                if (!areAllFinite(values.getInt32(0), values.getInt32(SIZEOF_INT), values.getInt32(2 * SIZEOF_INT)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.posX = values.getInt32(0);
+                listener.posY = values.getInt32(SIZEOF_INT);
+                listener.posZ = values.getInt32(2 * SIZEOF_INT);
+                listener.update();
+                return;
+
+            case AL_VELOCITY:
+                if (!hasEnoughBytes(values, 3 * SIZEOF_INT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                if (!areAllFinite(values.getInt32(0), values.getInt32(SIZEOF_INT), values.getInt32(2 * SIZEOF_INT)))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.velX = values.getInt32(0);
+                listener.velY = values.getInt32(SIZEOF_INT);
+                listener.velZ = values.getInt32(2 * SIZEOF_INT);
+                listener.update();
+                return;
+
+            case AL_ORIENTATION:
+                if (!hasEnoughBytes(values, 6 * SIZEOF_INT))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                int v0 = values.getInt32(0);
+                int v1 = values.getInt32(SIZEOF_INT);
+                int v2 = values.getInt32(2 * SIZEOF_INT);
+                int v3 = values.getInt32(3 * SIZEOF_INT);
+                int v4 = values.getInt32(4 * SIZEOF_INT);
+                int v5 = values.getInt32(5 * SIZEOF_INT);
+                if (!areAllFinite(v0, v1, v2, v3, v4, v5))
+                {
+                    stateManager.setError(AL_INVALID_VALUE);
+                    return;
+                }
+                listener.orientationAtX = v0;
+                listener.orientationAtY = v1;
+                listener.orientationAtZ = v2;
+                listener.orientationUpX = v3;
+                listener.orientationUpY = v4;
+                listener.orientationUpZ = v5;
+                listener.update();
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alListeneriv(int param, ArrayBuffer values)
+    {
+        alListeneriv(param, DataViewNative.create(values));
+    }
 }
