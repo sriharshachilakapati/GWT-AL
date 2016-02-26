@@ -146,7 +146,8 @@ class ALSource
             startTime = context.getCurrentTime();
 
             if (oldState == AL_PAUSED)
-                sourceNode.start(0, bufferPosition % getBufferDuration());
+                sourceNode.start(0, bufferPosition % buffer == AL_NONE ? 0 :
+                                    getBufferManager().getBuffer(buffer).audioBuffer.getDuration());
             else
                 sourceNode.start(0, 0);
         }
@@ -176,10 +177,5 @@ class ALSource
         }
         else if (state == AL_INITIAL)
             sourceState = AL_INITIAL;
-    }
-
-    private double getBufferDuration()
-    {
-        return buffer == AL_NONE ? 0 : getBufferManager().getBuffer(buffer).audioBuffer.getDuration();
     }
 }
