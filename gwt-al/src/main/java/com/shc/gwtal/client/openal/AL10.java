@@ -1922,4 +1922,239 @@ public final class AL10
     {
         alListeneriv(param, DataViewNative.create(values));
     }
+
+    public static void alGetListener3f(int param, DataView v1, DataView v2, DataView v3)
+    {
+        StateManager stateManager = getStateManager();
+
+        // Ensure buffer size for a float
+        if (hasEnoughBytes(v1, SIZEOF_FLOAT) ||
+            hasEnoughBytes(v2, SIZEOF_FLOAT) ||
+            hasEnoughBytes(v3, SIZEOF_FLOAT))
+        {
+            stateManager.setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        ALListener alListener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_POSITION:
+                v1.setFloat32(0, alListener.posX);
+                v2.setFloat32(0, alListener.posY);
+                v3.setFloat32(0, alListener.posZ);
+                return;
+
+            case AL_VELOCITY:
+                v1.setFloat32(0, alListener.velX);
+                v2.setFloat32(0, alListener.velY);
+                v3.setFloat32(0, alListener.velZ);
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetListener3f(int param, ArrayBuffer v1, ArrayBuffer v2, ArrayBuffer v3)
+    {
+        alGetListener3f(param, DataViewNative.create(v1), DataViewNative.create(v2), DataViewNative.create(v3));
+    }
+
+    public static float alGetListenerf(int param)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener alListener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_GAIN:
+                return alListener.gain;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+        return 0;
+    }
+
+    public static void alGetListenerf(int param, DataView value)
+    {
+        if (!hasEnoughBytes(value, SIZEOF_FLOAT))
+        {
+            getStateManager().setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        value.setFloat32(0, alGetListenerf(param));
+    }
+
+    public static void alGetListenerf(int param, ArrayBuffer value)
+    {
+        alGetListenerf(param, DataViewNative.create(value));
+    }
+
+    public static void alGetListenerfv(int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_ORIENTATION:
+                if (!checkSetError(hasEnoughBytes(values, 6 * SIZEOF_FLOAT), AL_INVALID_VALUE))
+                {
+                    values.setFloat32(0, listener.orientationAtX);
+                    values.setFloat32(SIZEOF_FLOAT, listener.orientationAtY);
+                    values.setFloat32(SIZEOF_FLOAT * 2, listener.orientationAtZ);
+                    values.setFloat32(SIZEOF_FLOAT * 3, listener.orientationUpX);
+                    values.setFloat32(SIZEOF_FLOAT * 4, listener.orientationUpY);
+                    values.setFloat32(SIZEOF_FLOAT * 5, listener.orientationUpZ);
+                }
+                return;
+
+            case AL_GAIN:
+                if (!checkSetError(hasEnoughBytes(values, SIZEOF_FLOAT), AL_INVALID_VALUE))
+                    values.setFloat32(0, listener.gain);
+                return;
+
+            case AL_VELOCITY:
+                if (!checkSetError(hasEnoughBytes(values, 3 * SIZEOF_FLOAT), AL_INVALID_VALUE))
+                {
+                    values.setFloat32(0, listener.velX);
+                    values.setFloat32(SIZEOF_FLOAT, listener.velY);
+                    values.setFloat32(SIZEOF_FLOAT * 2, listener.velZ);
+                }
+                return;
+
+            case AL_POSITION:
+                if (!checkSetError(hasEnoughBytes(values, 3 * SIZEOF_FLOAT), AL_INVALID_VALUE))
+                {
+                    values.setFloat32(0, listener.posX);
+                    values.setFloat32(SIZEOF_FLOAT, listener.posY);
+                    values.setFloat32(SIZEOF_FLOAT * 2, listener.posZ);
+                }
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetListenerfv(int param, ArrayBuffer values)
+    {
+        alGetListenerfv(param, DataViewNative.create(values));
+    }
+
+    public static void alGetListener3i(int param, DataView v1, DataView v2, DataView v3)
+    {
+        StateManager stateManager = getStateManager();
+
+        // Ensure buffer size for an int
+        if (hasEnoughBytes(v1, SIZEOF_INT) ||
+            hasEnoughBytes(v2, SIZEOF_INT) ||
+            hasEnoughBytes(v3, SIZEOF_INT))
+        {
+            stateManager.setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        ALListener alListener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_POSITION:
+                v1.setInt32(0, (int) alListener.posX);
+                v2.setInt32(0, (int) alListener.posY);
+                v3.setInt32(0, (int) alListener.posZ);
+                return;
+
+            case AL_VELOCITY:
+                v1.setInt32(0, (int) alListener.velX);
+                v2.setInt32(0, (int) alListener.velY);
+                v3.setInt32(0, (int) alListener.velZ);
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetListener3i(int param, ArrayBuffer v1, ArrayBuffer v2, ArrayBuffer v3)
+    {
+        alGetListener3i(param, DataViewNative.create(v1), DataViewNative.create(v2), DataViewNative.create(v3));
+    }
+
+    public static int alGetListeneri(int param)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener alListener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_GAIN:
+                return (int) alListener.gain;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+        return 0;
+    }
+
+    public static void alGetListeneri(int param, DataView value)
+    {
+        if (!hasEnoughBytes(value, SIZEOF_INT))
+        {
+            getStateManager().setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        value.setInt32(0, alGetListeneri(param));
+    }
+
+    public static void alGetListeneri(int param, ArrayBuffer value)
+    {
+        alGetListeneri(param, DataViewNative.create(value));
+    }
+
+    public static void alGetListeneriv(int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        ALListener listener = stateManager.listener;
+
+        switch (param)
+        {
+            case AL_ORIENTATION:
+                if (!checkSetError(hasEnoughBytes(values, 6 * SIZEOF_INT), AL_INVALID_VALUE))
+                {
+                    values.setInt32(0, (int) listener.orientationAtX);
+                    values.setInt32(SIZEOF_INT, (int) listener.orientationAtY);
+                    values.setInt32(SIZEOF_INT * 2, (int) listener.orientationAtZ);
+                    values.setInt32(SIZEOF_INT * 3, (int) listener.orientationUpX);
+                    values.setInt32(SIZEOF_INT * 4, (int) listener.orientationUpY);
+                    values.setInt32(SIZEOF_INT * 5, (int) listener.orientationUpZ);
+                }
+                return;
+
+            case AL_VELOCITY:
+                if (!checkSetError(hasEnoughBytes(values, 3 * SIZEOF_INT), AL_INVALID_VALUE))
+                {
+                    values.setInt32(0, (int) listener.velX);
+                    values.setInt32(SIZEOF_INT, (int) listener.velY);
+                    values.setInt32(SIZEOF_INT * 2, (int) listener.velZ);
+                }
+                return;
+
+            case AL_POSITION:
+                if (!checkSetError(hasEnoughBytes(values, 3 * SIZEOF_INT), AL_INVALID_VALUE))
+                {
+                    values.setInt32(0, (int) listener.posX);
+                    values.setInt32(SIZEOF_INT, (int) listener.posY);
+                    values.setInt32(SIZEOF_INT * 2, (int) listener.posZ);
+                }
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetListeneriv(int param, ArrayBuffer values)
+    {
+        alGetListeneriv(param, DataViewNative.create(values));
+    }
 }
