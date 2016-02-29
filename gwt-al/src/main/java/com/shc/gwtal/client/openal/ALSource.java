@@ -6,6 +6,9 @@ import com.shc.gwtal.client.webaudio.nodes.AudioBufferSourceNode;
 import com.shc.gwtal.client.webaudio.nodes.GainNode;
 import com.shc.gwtal.client.webaudio.nodes.PannerNode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import static com.shc.gwtal.client.openal.AL10.*;
 import static com.shc.gwtal.client.openal.AL11.*;
 import static com.shc.gwtal.client.openal.ALUtils.*;
@@ -50,8 +53,12 @@ class ALSource
 
     public int buffersProcessed = 0;
 
+    public Queue<Integer> queue;
+
     public ALSource()
     {
+        queue = new LinkedList<>();
+
         AudioContext ctx = getStateManager().context;
 
         pannerNode = ctx.createPanner();
@@ -133,8 +140,35 @@ class ALSource
                         // Set to stopped upon ended.
                         setSourceState(AL_STOPPED);
                     }
+
+                    // Streaming sources have special cases
+                    if (sourceType == AL_STREAMING)
+                    {
+                        if (buffersProcessed != buffersQueued)
+                        {
+                            // Queued buffers are still available, go play next
+                            setSourceState(AL_PLAYING);
+                        }
+                        else if (looping == AL_FALSE)
+                            setSourceState(AL_STOPPED);
+                    }
                 }
             });
+
+            if (sourceType == AL_STREAMING)
+            {
+                if (buffersProcessed == buffersQueued)
+                {
+                    setSourceState(AL_STOPPED);
+                    return;
+                }
+
+                buffer = queue.poll();
+                buffersProcessed++;
+
+                // Insert this buffer at the end of the queue
+                queue.add(buffer);
+            }
 
             ALBuffer alBuffer = getBufferManager().getBuffer(buffer);
 
@@ -154,6 +188,7 @@ class ALSource
         else if (state == AL_STOPPED)
         {
             sourceState = AL_STOPPED;
+            buffersProcessed = 0;
             bufferPosition = 0;
 
             if (sourceNode == null)
