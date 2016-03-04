@@ -2157,4 +2157,98 @@ public final class AL10
     {
         alGetListeneriv(param, DataViewNative.create(values));
     }
+
+    public static int alGetBufferi(int buffer, int param)
+    {
+        StateManager stateManager = getStateManager();
+        BufferManager bufferManager = getBufferManager();
+
+        if (!bufferManager.isValid(buffer))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return 0;
+        }
+
+        ALBuffer alBuffer = bufferManager.getBuffer(buffer);
+
+        switch (param)
+        {
+            case AL_FREQUENCY:
+                return (int) alBuffer.audioBuffer.getSampleRate();
+
+            case AL_SIZE:
+                return alBuffer.audioBuffer.getLength();
+
+            case AL_BITS:
+                return 16;
+
+            case AL_CHANNELS:
+                return alBuffer.audioBuffer.getNumberOfChannels();
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+        return 0;
+    }
+
+    public static void alGetBufferi(int buffer, int param, DataView value)
+    {
+        if (!hasEnoughBytes(value, SIZEOF_INT))
+        {
+            getStateManager().setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        value.setInt32(0, alGetBufferi(buffer, param));
+    }
+
+    public static void alGetBufferi(int buffer, int param, ArrayBuffer value)
+    {
+        alGetBufferi(buffer, param, DataViewNative.create(value));
+    }
+
+    public static void alGetBufferiv(int buffer, int param, DataView values)
+    {
+        StateManager stateManager = getStateManager();
+        BufferManager bufferManager = getBufferManager();
+
+        if (!bufferManager.isValid(buffer))
+        {
+            stateManager.setError(AL_INVALID_NAME);
+            return;
+        }
+
+        if (!hasEnoughBytes(values, SIZEOF_INT))
+        {
+            stateManager.setError(AL_INVALID_VALUE);
+            return;
+        }
+
+        ALBuffer alBuffer = bufferManager.getBuffer(buffer);
+
+        switch (param)
+        {
+            case AL_FREQUENCY:
+                values.setInt32(0, (int) alBuffer.audioBuffer.getSampleRate());
+                return;
+
+            case AL_SIZE:
+                values.setInt32(0, alBuffer.audioBuffer.getLength());
+                return;
+
+            case AL_BITS:
+                values.setInt32(0, 16);
+                return;
+
+            case AL_CHANNELS:
+                values.setInt32(0, alBuffer.audioBuffer.getNumberOfChannels());
+                return;
+        }
+
+        stateManager.setError(AL_INVALID_ENUM);
+    }
+
+    public static void alGetBufferiv(int buffer, int param, ArrayBuffer values)
+    {
+        alGetBufferiv(buffer, param, DataViewNative.create(values));
+    }
 }
