@@ -7,9 +7,9 @@ import com.shc.gwtal.client.webaudio.AudioBuffer;
  */
 class ALBuffer
 {
-    public AudioBuffer audioBuffer;
+    AudioBuffer audioBuffer;
 
-    public boolean isReady()
+    boolean isReady()
     {
         return audioBuffer != null;
     }

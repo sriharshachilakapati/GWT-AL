@@ -19,23 +19,23 @@ final class BufferManager
 
     private int nextBufferID = 1;
 
-    public ALBuffer getBuffer(int bufferID)
+    ALBuffer getBuffer(int bufferID)
     {
         return buffers.get(bufferID);
     }
 
-    public int createBuffer()
+    int createBuffer()
     {
         buffers.put(nextBufferID, new ALBuffer());
         return nextBufferID++;
     }
 
-    public boolean isValid(int bufferID)
+    boolean isValid(int bufferID)
     {
         return getBuffer(bufferID) != null;
     }
 
-    public void deleteBuffer(int bufferID)
+    void deleteBuffer(int bufferID)
     {
         buffers.remove(bufferID);
     }

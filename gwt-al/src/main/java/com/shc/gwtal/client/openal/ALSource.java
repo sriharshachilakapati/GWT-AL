@@ -18,31 +18,31 @@ import static com.shc.gwtal.client.openal.ALUtils.*;
  */
 class ALSource
 {
-    public float posX, posY, posZ;
-    public float velX, velY, velZ;
-    public float dirX, dirY, dirZ;
+    float posX, posY, posZ;
+    float velX, velY, velZ;
+    float dirX, dirY, dirZ;
 
-    public float coneInnerAngle = 360f;
-    public float coneOuterAngle = 360f;
-    public float coneOuterGain  = 0.0f;
+    float coneInnerAngle = 360f;
+    float coneOuterAngle = 360f;
+    float coneOuterGain  = 0.0f;
 
-    public float gain = 1.0f;
+    float gain = 1.0f;
 
-    public int sourceRelative = AL_FALSE;
-    public int sourceState    = AL_INITIAL;
-    public int sourceType     = AL_UNDETERMINED;
-    public int looping        = AL_FALSE;
-    public int buffer         = AL_NONE;
+    int sourceRelative = AL_FALSE;
+    int sourceState    = AL_INITIAL;
+    int sourceType     = AL_UNDETERMINED;
+    int looping        = AL_FALSE;
+    int buffer         = AL_NONE;
 
-    public float minGain = 0.0f;
-    public float maxGain = 1.0f;
+    float minGain = 0.0f;
+    float maxGain = 1.0f;
 
-    public float referralDistance = 1.0f;
-    public float rolloffFactor    = 1.0f;
-    public float maxDistance      = Float.MAX_VALUE;
-    public float pitch            = 1.0f;
+    float referralDistance = 1.0f;
+    float rolloffFactor    = 1.0f;
+    float maxDistance      = Float.MAX_VALUE;
+    float pitch            = 1.0f;
 
-    public int buffersQueued = 0;
+    int buffersQueued = 0;
 
     public AudioBufferSourceNode sourceNode;
     public PannerNode            pannerNode;
@@ -51,11 +51,11 @@ class ALSource
     private double bufferPosition = 0;
     private double startTime;
 
-    public int buffersProcessed = 0;
+    int buffersProcessed = 0;
 
-    public Queue<Integer> queue;
+    private Queue<Integer> queue;
 
-    public ALSource()
+    ALSource()
     {
         queue = new LinkedList<>();
 
@@ -73,7 +73,7 @@ class ALSource
     /**
      * Called by the implementation to update the source
      */
-    public void update()
+    void update()
     {
         if (sourceNode == null)
             return;
@@ -103,7 +103,7 @@ class ALSource
         outputNode.getGain().setValue(Math.min(maxGain, Math.max(minGain, gain)));
     }
 
-    public void setSourceState(int state)
+    void setSourceState(int state)
     {
         if (buffer == AL_NONE)
         {

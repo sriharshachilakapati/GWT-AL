@@ -19,21 +19,21 @@ final class StateManager
 {
     private static final Map<ALContext, StateManager> stateManagers = new HashMap<>();
 
-    public final BufferManager bufferManager = new BufferManager();
-    public final SourceManager sourceManager = new SourceManager();
+    final BufferManager bufferManager = new BufferManager();
+    final SourceManager sourceManager = new SourceManager();
 
-    public final ALListener listener;
+    final ALListener listener;
 
-    public AudioNode  inputNode;
-    public GainNode   gainNode;
-    public PannerNode pannerNode;
+    AudioNode  inputNode;
+    GainNode   gainNode;
+    PannerNode pannerNode;
 
-    public boolean gainEnabled;
-    public boolean pannerEnabled;
+    private boolean gainEnabled;
+    boolean pannerEnabled;
 
-    public int distanceModel;
+    int distanceModel;
 
-    public AudioContext context;
+    AudioContext context;
 
     private int error;
 
@@ -62,24 +62,24 @@ final class StateManager
         updatePipeline();
     }
 
-    public static StateManager forContext(ALContext context)
+    static StateManager forContext(ALContext context)
     {
         return stateManagers.get(context);
     }
 
-    public static StateManager create(ALContext context)
+    static StateManager create(ALContext context)
     {
         StateManager sm = new StateManager(context.getWebAudioContext());
         stateManagers.put(context, sm);
         return sm;
     }
 
-    public static void destroy(ALContext context)
+    static void destroy(ALContext context)
     {
         stateManagers.remove(context);
     }
 
-    public void updatePipeline()
+    void updatePipeline()
     {
         pipeline.clear();
 
@@ -106,14 +106,14 @@ final class StateManager
         listener.outputNode.connect(context.getDestination());
     }
 
-    public int getError()
+    int getError()
     {
         int error = this.error;
         this.error = AL_NO_ERROR;
         return error;
     }
 
-    public void setError(int error)
+    void setError(int error)
     {
         // The error should only be changed when the current recorded error is none. According to
         // the section 2.7 of the OpenAL 1.1 Specification:

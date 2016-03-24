@@ -7,34 +7,34 @@ import com.google.gwt.typedarrays.shared.DataView;
  */
 final class ALUtils
 {
-    public static final int SIZEOF_FLOAT = Float.SIZE / Byte.SIZE;
-    public static final int SIZEOF_INT   = Integer.SIZE / Byte.SIZE;
+    static final int SIZEOF_FLOAT = Float.SIZE / Byte.SIZE;
+    static final int SIZEOF_INT   = Integer.SIZE / Byte.SIZE;
 
     private ALUtils()
     {
     }
 
-    public static StateManager getStateManager()
+    static StateManager getStateManager()
     {
         return StateManager.forContext(AL.getCurrentContext());
     }
 
-    public static BufferManager getBufferManager()
+    static BufferManager getBufferManager()
     {
         return getStateManager().bufferManager;
     }
 
-    public static SourceManager getSourceManager()
+    static SourceManager getSourceManager()
     {
         return getStateManager().sourceManager;
     }
 
-    public static boolean isFinite(float val)
+    static boolean isFinite(float val)
     {
         return !Float.isInfinite(val) && !Float.isNaN(val);
     }
 
-    public static boolean areAllFinite(float... val)
+    static boolean areAllFinite(float... val)
     {
         for (float v : val)
             if (!isFinite(v))
@@ -43,12 +43,12 @@ final class ALUtils
         return true;
     }
 
-    public static boolean hasEnoughBytes(DataView dataView, int bytes)
+    static boolean hasEnoughBytes(DataView dataView, int bytes)
     {
         return dataView.byteLength() >= bytes;
     }
 
-    public static boolean checkSetError(boolean error, int alError)
+    static boolean checkSetError(boolean error, int alError)
     {
         if (error)
             getStateManager().setError(alError);

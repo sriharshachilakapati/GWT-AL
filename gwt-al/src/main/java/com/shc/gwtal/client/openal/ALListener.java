@@ -11,20 +11,20 @@ import com.shc.gwtal.client.webaudio.nodes.PannerNode;
  */
 class ALListener
 {
-    public float posX, posY, posZ;
-    public float velX, velY, velZ;
+    float posX, posY, posZ;
+    float velX, velY, velZ;
 
-    public float gain = 1f;
+    float gain = 1f;
 
-    public float orientationAtX, orientationAtY, orientationAtZ;
-    public float orientationUpX, orientationUpY, orientationUpZ;
+    float orientationAtX, orientationAtY, orientationAtZ;
+    float orientationUpX, orientationUpY, orientationUpZ;
 
-    public PannerNode inputNode;
-    public GainNode   outputNode;
+    PannerNode inputNode;
+    GainNode   outputNode;
 
     private AudioContext context;
 
-    public ALListener(AudioContext context)
+    ALListener(AudioContext context)
     {
         this.context = context;
 
@@ -51,7 +51,7 @@ class ALListener
      * Called by the implementation to update the listener.
      */
     @SuppressWarnings("deprecation")
-    public void update()
+    void update()
     {
         AudioListener listener = context.getAudioListener();
 
