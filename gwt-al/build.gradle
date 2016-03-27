@@ -5,6 +5,26 @@ apply plugin: 'signing'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+group = "com.goharsha"
+archivesBaseName = "gwt-al"
+version = "0.1-SNAPSHOT"
+
+// Check if the required properties are included, so we prevent our
+// build from failing.
+if (project.hasProperty('ossrhUsername'))
+{
+    project.ext.ossrhUsername = ossrhUsername
+    project.ext.ossrhPassword = ossrhPassword
+}
+else
+{
+    // We might be running on another system where he is not
+    // the owner who can push to OSSRH through maven. Set
+    // default values so he can still build the library locally.
+    project.ext.ossrhUsername = ''
+    project.ext.ossrhPassword = ''
+}
+
 dependencies {
     compile 'com.google.gwt:gwt-user:2.7.0'
 }
@@ -15,4 +35,69 @@ jar {
 
 javadoc {
     options.addStringOption("sourcepath", "")
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    // Only sign the archives if there is a username. This allows one to build the library
+    // on systems with no username set.
+    if (ossrhUsername != '')
+        sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: project.ext.ossrhUsername, password: project.ext.ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: project.ext.ossrhUsername, password: project.ext.ossrhPassword)
+            }
+
+            pom.project {
+                name 'GWT-AL'
+                packaging 'jar'
+                description 'Audio Library for GWT - Provides WebAudio API bindings and also an OpenAL implementation.'
+                url 'http://goharsha.com/WebGL4J'
+
+                scm {
+                    connection 'scm:git:git@github.com:sriharshachilakapati/GWT-AL.git'
+                    developerConnection 'scm:git:git@github.com:sriharshachilakapati/GWT-AL.git'
+                    url 'git@github.com:sriharshachilakapati/GWT-AL.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'sriharshachilakapati'
+                        name 'Sri Harsha Chilakapati'
+                        email 'sriharshachilakapati@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
