@@ -1527,6 +1527,9 @@ public final class AL10
 
             case AL_CONE_OUTER_ANGLE:
                 return (int) alSource.coneOuterAngle;
+
+            case AL_SOURCE_STATE:
+                return alSource.sourceState;
         }
 
         stateManager.setError(AL_INVALID_ENUM);

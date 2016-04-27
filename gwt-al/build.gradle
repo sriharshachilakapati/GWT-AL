@@ -75,7 +75,7 @@ uploadArchives {
                 name 'GWT-AL'
                 packaging 'jar'
                 description 'Audio Library for GWT - Provides WebAudio API bindings and also an OpenAL implementation.'
-                url 'http://goharsha.com/WebGL4J'
+                url 'http://goharsha.com/GWT-AL/'
 
                 scm {
                     connection 'scm:git:git@github.com:sriharshachilakapati/GWT-AL.git'
