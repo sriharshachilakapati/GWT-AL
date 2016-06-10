@@ -23,10 +23,12 @@ class ALListener
     GainNode   outputNode;
 
     private AudioContext context;
+    private StateManager stateManager;
 
-    ALListener(AudioContext context)
+    ALListener(AudioContext context, StateManager stateManager)
     {
         this.context = context;
+        this.stateManager = stateManager;
 
         inputNode = context.createPanner();
         outputNode = context.createGain();
@@ -59,7 +61,8 @@ class ALListener
         listener.setOrientation(orientationAtX, orientationAtY, orientationAtZ,
                 orientationUpX, orientationUpY, orientationUpZ);
 
-        inputNode.setVelocity(velX, velY, velZ);
         outputNode.getGain().setValue(Math.min(1.0f, Math.max(0.0f, gain)));
+
+        stateManager.sourceManager.applyDopplerForAllSources();
     }
 }

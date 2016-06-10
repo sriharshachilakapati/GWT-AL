@@ -84,7 +84,7 @@ public final class AudioDecoder
                     @Override
                     public void invoke(DOMException error)
                     {
-                        onError.invoke("" + error.getCode() + ": " + error.getMessage());
+                        onError.invoke(error == null ? "Unknown error" : "" + error.getCode() + ": " + error.getMessage());
                     }
                 }
         );

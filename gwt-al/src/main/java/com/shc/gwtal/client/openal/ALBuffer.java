@@ -13,4 +13,9 @@ class ALBuffer
     {
         return audioBuffer != null;
     }
+
+    float getSampleRate()
+    {
+        return audioBuffer == null ? 0 : audioBuffer.getSampleRate();
+    }
 }

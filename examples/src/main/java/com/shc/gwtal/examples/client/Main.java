@@ -55,8 +55,10 @@ public class Main implements EntryPoint
             {
                 try
                 {
-                    createWebAudioAPIExample(request.getResponseArrayBuffer());
-                    createOpenALExample(request.getResponseArrayBuffer());
+                    ArrayBuffer data = request.getResponseArrayBuffer();
+
+                    createWebAudioAPIExample(data);
+                    createOpenALExample(data);
                 }
                 catch (AudioContextException e)
                 {

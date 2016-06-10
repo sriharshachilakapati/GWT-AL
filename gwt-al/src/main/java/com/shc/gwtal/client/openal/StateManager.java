@@ -25,13 +25,14 @@ final class StateManager
     final ALListener listener;
 
     AudioNode  inputNode;
-    GainNode   gainNode;
     PannerNode pannerNode;
 
-    private boolean gainEnabled;
     boolean pannerEnabled;
 
     int distanceModel;
+
+    float speedOfSound = 343.3f;
+    float dopplerFactor = 1.0f;
 
     AudioContext context;
 
@@ -53,11 +54,10 @@ final class StateManager
         ((GainNode) inputNode).getGain().setValue(1.0f);
 
         // Create other nodes in this states too
-        gainNode = context.createGain();
         pannerNode = context.createPanner();
 
         // Create the listener
-        this.listener = new ALListener(context);
+        this.listener = new ALListener(context, this);
 
         updatePipeline();
     }
@@ -84,7 +84,6 @@ final class StateManager
         pipeline.clear();
 
         if (pannerEnabled) pipeline.add(pannerNode);
-        if (gainEnabled) pipeline.add(gainNode);
 
         AudioNode node = inputNode;
 
@@ -104,6 +103,7 @@ final class StateManager
 
         // Connect listener to destination
         listener.outputNode.connect(context.getDestination());
+        listener.update();
     }
 
     int getError()

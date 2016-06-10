@@ -104,6 +104,7 @@ public class PannerNode extends AudioNode
         this.setOrientation(x, y, z);
     }-*/;
 
+    @Deprecated
     public final native void setVelocity(float x, float y, float z) /*-{
         this.setVelocity(x, y, z);
     }-*/;

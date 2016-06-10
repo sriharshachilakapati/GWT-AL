@@ -132,8 +132,23 @@ public final class AudioContext extends JavaScriptObject
 
     public native Promise<AudioBuffer> decodeAudioData(ArrayBuffer audioData, DecodeSuccessCallback successCallback,
                                                        DecodeErrorCallback errorCallback) /*-{
+        // Patch ArrayBuffer.slice on FireFox
+        if (!ArrayBuffer.prototype.slice)
+            ArrayBuffer.prototype.slice = function (start, end)
+            {
+                var that = new Uint8Array(this);
+                if (end == undefined) end = that.length;
+                var result = new ArrayBuffer(end - start);
+                var resultArray = new Uint8Array(result);
+
+                for (var i = 0; i < resultArray.length; i++)
+                    resultArray[i] = that[i + start];
+
+                return result;
+            }
+
         return this.decodeAudioData(
-            audioData,
+            audioData.slice(0),
 
             function (decodedData)
             {

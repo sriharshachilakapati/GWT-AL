@@ -12,6 +12,12 @@ final class SourceManager
 
     private int nextSourceID = 1;
 
+    void applyDopplerForAllSources()
+    {
+        for (ALSource source : sources.values())
+            source.applyDoppler();
+    }
+
     int createSource()
     {
         sources.put(nextSourceID, new ALSource());
