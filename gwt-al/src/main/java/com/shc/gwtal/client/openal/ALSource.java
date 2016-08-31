@@ -1,6 +1,5 @@
 package com.shc.gwtal.client.openal;
 
-import com.google.gwt.core.client.GWT;
 import com.shc.gwtal.client.webaudio.AudioContext;
 import com.shc.gwtal.client.webaudio.AudioEventHandler;
 import com.shc.gwtal.client.webaudio.nodes.AudioBufferSourceNode;
@@ -22,26 +21,32 @@ class ALSource
     float posX, posY, posZ;
     float velX, velY, velZ;
     float dirX, dirY, dirZ;
+
     float coneInnerAngle = 360f;
     float coneOuterAngle = 360f;
     float coneOuterGain  = 0.0f;
     float gain           = 1.0f;
+
     int sourceRelative = AL_FALSE;
     int sourceState    = AL_INITIAL;
     int sourceType     = AL_UNDETERMINED;
     int looping        = AL_FALSE;
     int buffer         = AL_NONE;
+
     float minGain          = 0.0f;
     float maxGain          = 1.0f;
     float referralDistance = 1.0f;
     float rolloffFactor    = 1.0f;
     float maxDistance      = Float.MAX_VALUE;
     float pitch            = 1.0f;
+
     int buffersQueued    = 0;
     int buffersProcessed = 0;
+
     private AudioBufferSourceNode sourceNode;
     private PannerNode            pannerNode;
     private GainNode              outputNode;
+
     private double bufferPosition = 0;
     private double startTime;
 
@@ -57,7 +62,6 @@ class ALSource
         outputNode = ctx.createGain();
 
         pannerNode.connect(outputNode);
-        outputNode.connect(getStateManager().inputNode);
 
         update();
     }
@@ -92,6 +96,11 @@ class ALSource
         outputNode.getGain().setValue(Math.min(maxGain, Math.max(minGain, gain)));
 
         applyDoppler();
+
+        if (sourceState != AL_STOPPED)
+            outputNode.connect(getStateManager().inputNode);
+        else
+            outputNode.disconnect();
     }
 
     void applyDoppler()
@@ -139,8 +148,6 @@ class ALSource
 
         if (Float.isNaN(dopplerShift))
             dopplerShift = 1;
-
-        GWT.log("Doppler shift: " + dopplerShift);
 
         sourceNode.getPlaybackRate().setValue(pitch * dopplerShift);
     }
@@ -223,8 +230,7 @@ class ALSource
             startTime = context.getCurrentTime();
 
             if (oldState == AL_PAUSED)
-                sourceNode.start(0, bufferPosition % buffer == AL_NONE ? 0 :
-                                    getBufferManager().getBuffer(buffer).audioBuffer.getDuration());
+                sourceNode.start(0, bufferPosition % buffer == AL_NONE ? 0 : bufferPosition);
             else
                 sourceNode.start(0, 0);
         }
