@@ -246,6 +246,8 @@ class ALSource
             sourceNode.stop(0);
             sourceNode.disconnect();
             sourceNode = null;
+
+            outputNode.disconnect();
         }
         else if (state == AL_PAUSED)
         {
@@ -260,6 +262,8 @@ class ALSource
             sourceNode.stop(0);
             sourceNode.disconnect();
             sourceNode = null;
+
+            outputNode.disconnect();
         }
         else if (state == AL_INITIAL)
             sourceState = AL_INITIAL;
