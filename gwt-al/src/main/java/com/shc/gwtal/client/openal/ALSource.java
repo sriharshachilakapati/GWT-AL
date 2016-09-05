@@ -97,10 +97,10 @@ class ALSource
 
         applyDoppler();
 
-        if (sourceState != AL_STOPPED)
+        outputNode.disconnect();
+
+        if (sourceState != AL_STOPPED && sourceState != AL_PAUSED)
             outputNode.connect(getStateManager().inputNode);
-        else
-            outputNode.disconnect();
     }
 
     void applyDoppler()
